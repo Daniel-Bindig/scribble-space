@@ -8,6 +8,11 @@ async function getUserById(id) {
   return user.get();
 }
 
+async function getAllEntriesOfUser(userId) {
+  return {};
+}
+
 module.exports = {
-  getUserById
+  getUserById,
+  getAllEntriesOfUser
 };
