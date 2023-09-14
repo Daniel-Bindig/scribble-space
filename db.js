@@ -9,7 +9,12 @@ async function getUserById(id) {
 }
 
 async function getAllEntriesOfUser(userId) {
-  return {};
+  const entries = await Entry.findAll({
+    where: {
+      "userId": userId
+    }
+  });
+  return entries.map(entry => entry.get());
 }
 
 module.exports = {
