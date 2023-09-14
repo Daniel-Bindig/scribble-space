@@ -1,0 +1,43 @@
+:root {
+    --primary: #4d433c;
+    --secondary: #f3e5b8;
+    --tertiary: #634b3d;
+    --quatrinary: #6c6b67;
+    --light: #e3e4e3;
+    --dark: #182c23;
+    --error: rgb(228, 46, 1);
+}
+body {
+    background-color: var(--secondary);
+}
+main {
+    text-align: center;
+}
+
+h1 {
+    font-size: 55px;
+    font-family: 'indie flower';
+}
+
+#description {
+    font-family: 'handlee';
+    font-size: 25px;
+}
+
+#btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px;
+}
+
+.btn {
+    width: 200px;
+    border: solid 3px;
+    border-radius: 5px;
+    background-color: var(--light);
+}
+
+.btn:active {
+    background-color: grey;
+}
