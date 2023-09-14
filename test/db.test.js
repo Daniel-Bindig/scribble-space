@@ -1,5 +1,4 @@
 const db = require('../db');
-const { beforeFindAfterExpandIncludeAll } = require('../models/user');
 
 test('Get raw user data', async () => {
   const data = await db.getUserById(1);
