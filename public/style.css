@@ -1,0 +1,72 @@
+:root {
+    --primary: #4d433c;
+    --secondary: #f3e5b8;
+    --tertiary: #634b3d;
+    --quatrinary: #6c6b67;
+    --light: #e3e4e3;
+    --dark: #182c23;
+    --error: rgb(228, 46, 1);
+}
+body {
+    background-color: var(--secondary);
+}
+main {
+    text-align: center;
+}
+
+.heading-text {
+    font-size: 55px;
+    font-family: 'indie flower';
+}
+
+#description {
+    font-family: 'handlee';
+    font-size: 25px;
+}
+
+#btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px;
+}
+
+.btn {
+    width: 200px;
+    border: solid 3px;
+    border-radius: 5px;
+    background-color: var(--light);
+}
+
+.btn:active {
+    background-color: grey;
+}
+
+#login-heading {
+    font-size: 4 0px;
+    font-family: 'indie flower';
+}
+
+.form-card {
+    background-color: var(--quatrinary);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form .form-group {
+    display: block;
+    width: 100%;
+    margin: 0.625rem 0;
+    font-family: 'handlee';
+    font-size: 25px;
+}
+
+.form-input {
+    height: 40px;
+    width: 400px;
+    border-radius: 10px;
+    font-size: 20px;
+    padding-left: 20px;
+}
+
