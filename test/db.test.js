@@ -1,4 +1,5 @@
 const db = require('../db');
+const { beforeFindAfterExpandIncludeAll } = require('../models/user');
 
 test('Get raw user data', async () => {
   const data = await db.getUserById(1);
@@ -12,7 +13,6 @@ test('Get raw user data', async () => {
   });
 });
 
-// Test getting all entries for a user
 test('Get all entries of a user', async () => {
   const data = await db.getAllEntriesOfUser(1);
   expect(data).toEqual([
@@ -37,4 +37,19 @@ test('Get all entries of a user', async () => {
   ]);
 });
 
+test('Create and retrieve a reminder', async () => {
 
+  const create = await db.createReminder({
+    entryId: 1,
+    reminderTime: new Date("January 1, 1975 00:00:00 UTC")
+  });
+
+  expect(create.entryId).toBe(1);
+  expect(create.reminderTime).toEqual(new Date("January 1, 1975 00:00:00 UTC"));
+
+
+  const get = await db.getReminderById(create.id);
+  
+  expect(get.reminderTime).toEqual(new Date("January 1, 1975 00:00:00 UTC"));
+  expect(get.isCompleted).toEqual(false);
+});
