@@ -45,4 +45,6 @@ Entry.init({
   timestamps: true
 });
 
+Entry.belongsTo(User, { foreignKey: 'userId' });
+
 module.exports = Entry;
