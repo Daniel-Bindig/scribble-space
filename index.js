@@ -17,7 +17,7 @@ app.engine('handlebars', exphbs.engine({
 app.set('view engine', 'handlebars');
 
 app.use(session({
-  secret: process.env.session_secret,
+  secret: process.env.session_secret || 'secret',
   resave: false,
   saveUninitialized: true
 }));
