@@ -42,4 +42,6 @@ Reminder.init({
   timestamps: true
 });
 
+Reminder.belongsTo(Entry, { foreignKey: 'entryId' });
+
 module.exports = Reminder;
