@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.use(session({
-  secret: process.env.session_secret || 'secret',
+  secret: process.env.session_secret || toString(Math.random()),  // Use random string if no secret is provided
   resave: false,
   saveUninitialized: true
 }));
