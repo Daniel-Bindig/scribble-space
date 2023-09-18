@@ -39,6 +39,10 @@ app.get('/signup', (req, res) => {
   res.render('content/signup');
 });
 
+app.get('/test', (req, res) => {
+  res.render('content/test');
+});
+
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   
