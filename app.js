@@ -4,11 +4,11 @@ const session = require('express-session');
 const passport = require('passport');
 const dotenv = require('dotenv');
 
-// Initialize dotenv for environment variables
+// Initialize dotenv 
 dotenv.config();
 
 // Database setup
-const { sequelize } = require('./models');
+const { sequelize } = require('./database');
 
 // Passport config
 require('./config/passport-setup');
@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-// Initialize Passport and restore authentication state from the session, if any
+// Initialize Passport and restore authentication state from the session
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -48,5 +48,5 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// Export app to use it in other files like server.js
+// Export app 
 module.exports = app;
