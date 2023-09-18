@@ -13,10 +13,10 @@ router.use(isAuthenticated);
 
 // Routes
 const entry = require('./entry');
-//const reminder = require('./reminder');
+const reminder = require('./reminder');
 // Add any others here
 
 router.use('/entry', entry);
-//router.use('/reminder', reminder);
+router.use('/reminder', reminder);
 
 module.exports = router;
