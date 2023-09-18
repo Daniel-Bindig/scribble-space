@@ -28,6 +28,14 @@ app.get('/', (req, res) => {
   res.render('content/landing');
 });
 
+app.get('/login', (req, res) => {
+  res.render('content/login');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('content/signup');
+});
+
 app.listen(3000, () => {
   console.log('The application is running on localhost:3000!')
 });
