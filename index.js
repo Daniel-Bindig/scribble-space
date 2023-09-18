@@ -1,11 +1,13 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.engine('handlebars', exphbs.engine({
@@ -34,6 +36,17 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.render('content/signup');
+});
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  console.log("Caught login request with username: " + email + " and password: " + password)
+
+  // Store info in session
+  req.session.email = email;
+  
+  res.redirect('/');
 });
 
 app.listen(3000, () => {

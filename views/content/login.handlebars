@@ -1,16 +1,16 @@
 <main>
     <div class="form-card">
         <h2 id="login-heading">LOGIN</h2>
-        <form>
+        <form action="/login" method="POST">
             <div class="form-group">
                 <label for="email-login">Email:</label>
                 <br>
-                <input type="text" class="form-input"/>
+                <input type="text" name="email" class="form-input"/>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <br>
-                <input type="text" class="form-input"/>
+                <input type="text" name="password" class="form-input"/>
             </div>
             <div>
                 <button class="btn">LOGIN</button>
