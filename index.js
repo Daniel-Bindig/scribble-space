@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const crypto = require('crypto');
 const path = require('path');
 const routes = require('./routes');
 require('dotenv').config();
@@ -12,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.use(session({
-  secret: process.env.session_secret || toString(Math.random()),  // Use random string if no secret is provided
+  secret: process.env.session_secret || crypto.randomBytes(64).toString('hex'),  // Use random string if no secret is provided
   resave: false,
   saveUninitialized: true
 }));
