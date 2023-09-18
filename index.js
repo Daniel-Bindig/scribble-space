@@ -3,12 +3,19 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
+const routes = require('./routes');
 require('dotenv').config();
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+app.use(session({
+  secret: process.env.session_secret || 'secret',
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.engine('handlebars', exphbs.engine({
   layoutsDir: path.join(__dirname, 'views/'),
@@ -17,12 +24,6 @@ app.engine('handlebars', exphbs.engine({
 }));
 
 app.set('view engine', 'handlebars');
-
-app.use(session({
-  secret: process.env.session_secret || 'secret',
-  resave: false,
-  saveUninitialized: true
-}));
 
 app.use(express.json());
 
@@ -44,10 +45,17 @@ app.post('/login', (req, res) => {
   console.log("Caught login request with username: " + email + " and password: " + password)
 
   // Store info in session
-  req.session.email = email;
+  req.session.email = "text@example.com";
+  req.session.userId = 1;
+  req.session.username = "testuser";
+
+  console.log(req.session.username)
   
   res.redirect('/');
 });
+
+
+app.use('/', routes);
 
 app.listen(3000, () => {
   console.log('The application is running on localhost:3000!')
