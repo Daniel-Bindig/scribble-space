@@ -1,11 +1,15 @@
 const menuItems = document.querySelectorAll('.menu li a');
 const contentArea = document.getElementById('content-area');
+const selectedOption = document.getElementById('selected-option');
 
 menuItems.forEach(item => {
     item.addEventListener('click', event => {
         event.preventDefault();
 
         const contentType = item.getAttribute('data-content');
+
+        const optionText = item.textContent;
+        selectedOption.textContent = optionText;
 
         contentArea.innerHTML = '';
 
