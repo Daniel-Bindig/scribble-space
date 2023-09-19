@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
+const exphbs  = require('express-handlebars');
+
 
 // Initialize dotenv 
 dotenv.config();
@@ -19,12 +21,17 @@ require('./config/passport-setup');
 // Initialize Express app
 const app = express();
 
+
 // Middleware
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Configuring the Handlebars engine
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
 const MySQLStore = require('express-mysql-session')(session);
 
@@ -56,6 +63,25 @@ app.use(passport.session());
 // Routes
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/apiRoutes'));
+
+// 3. Add new routes for serving Handlebars templates
+app.get('/', (req, res) => {
+  res.render('main');
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

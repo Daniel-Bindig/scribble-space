@@ -1,0 +1,23 @@
+<div class="form-card">
+    <h2 id="login-heading">LOGIN</h2>
+    <form method="POST" action="/auth/login">
+        <div class="form-group">
+            <label for="email-login">Email:</label>
+            <br>
+            <input type="text" name="email" class="form-input" id="email-login"/>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <br>
+            <input type="password" name="password" class="form-input" id="password"/>
+        </div>
+        <div>
+            <button type="submit" class="btn">LOGIN</button>
+        </div>
+        <div>
+            <p>
+                Don't have an account? <a href="/signup">Sign Up</a>
+            </p>
+        </div>
+    </form>
+</div>

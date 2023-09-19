@@ -9,7 +9,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  logging: false, // You can set this to `true` for debugging
+  logging: false, // can set this to `true` for debugging
 });
 
 // Test the database connection

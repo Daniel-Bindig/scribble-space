@@ -1,0 +1,130 @@
+:root {
+    --primary: #4d433c;
+    --secondary: #f3e5b8;
+    --tertiary: #634b3d;
+    --quatrinary: #bdb083;
+    --light: #e3e4e3;
+    --dark: #182c23;
+    --error: rgb(228, 46, 1);
+}
+
+html body {
+    height: 100%;
+    background-color: var(--secondary);
+    margin: 0px;
+}
+
+main {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.heading-text {
+    font-size: 55px;
+    font-family: 'indie flower';
+}
+
+#description {
+    font-family: 'handlee';
+    font-size: 25px;
+}
+
+#btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px;
+}
+
+.btn {
+    width: 200px;
+    border: solid 3px;
+    border-radius: 5px;
+    background-color: var(--light);
+}
+
+.btn:active {
+    background-color: grey;
+}
+
+#login-heading {
+    font-size: 40px;
+    font-family: 'indie flower';
+}
+
+.form-card {
+    background-color: var(--quatrinary);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    border: solid 2px var(--tertiary);
+}
+
+form .form-group {
+    display: block;
+    width: 100%;
+    margin: 0.625rem 0;
+    font-family: 'handlee';
+    font-size: 25px;
+}
+
+.form-input {
+    height: 40px;
+    width: 400px;
+    border-radius: 10px;
+    font-size: 20px;
+    padding-left: 20px;
+}
+
+--- DASHBOARD CSS --- 
+
+nav .navbar {
+    padding: 10px 0px;
+}
+
+.menu {
+    background-color: black;
+    list-style-type: none;
+    padding: 10px 0px;
+    margin-top: 0px;
+}
+
+.menu li {
+    display: inline;
+    margin-right: 20px;
+    padding-right: 25px;
+    border-right: 1px solid white;
+}
+
+.menu li:last-child {
+    margin-right: 0;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.lower-container {
+    width: 100%;
+    height: 90%;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+#content-area {
+    width: 100%;
+    height: calc(100vh - 70px);
+    border: 1px solid blue;
+    margin: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}

@@ -7,6 +7,11 @@ const router = express.Router();
 // Number of salt rounds
 const saltRounds = 10;
 
+// Signup Route - Display Signup Form
+router.get('/signup', (req, res) => {
+  res.render('signup'); // Renders the "signup.handlebars" template
+});
+
 // Signup Route
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
@@ -20,8 +25,8 @@ router.post('/signup', async (req, res) => {
       email,
       passwordHash: hash
     });
-    res.status(201).json({ message: 'User created', user: newUser });
-  } catch (err) {
+    res.redirect('/auth/login');  // Redirect to login page
+  }  catch (err) {
     res.status(500).json({ message: 'Error creating user', error: err });
   }
 });
@@ -39,6 +44,12 @@ router.get('/user/:id', async (req, res) => {
     res.status(500).json({ message: 'Error fetching user', error: err });
   }
 });
+
+// Login Route - Display Login Form
+router.get('/login', (req, res) => {
+  res.render('login'); // Renders the "login.handlebars" template
+});
+
 
 // Login Route
 router.post('/login', 
