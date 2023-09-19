@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="./public/style.css">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower:regular" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Handlee:regular" rel="stylesheet" />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth'
+          });
+          calendar.render();
+        });
+  
+    </script>
 </head>
 
 <body>
@@ -53,6 +65,7 @@
                 </div>
             </form>
         </div>
+        <div id="calendar"></div>
     </main>
     <footer>
 
