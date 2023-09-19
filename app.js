@@ -1,12 +1,13 @@
 // Required modules
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
-const exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 
 
 // Initialize dotenv 
@@ -22,6 +23,7 @@ require('./config/passport-setup');
 const app = express();
 
 
+
 // Middleware
 app.use(helmet());
 app.use(cors());
@@ -29,9 +31,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Configuring the Handlebars engine
-app.engine('handlebars', exphbs());
-app.set('view engine', 'handlebars');
+
 
 const MySQLStore = require('express-mysql-session')(session);
 
@@ -60,28 +60,30 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Fixed Configuring the Handlebars engine
+app.engine('handlebars', exphbs.engine());
+app.set('views', path.join(__dirname, 'layouts')); 
+app.set('view engine', 'handlebars');
+
 // Routes
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/apiRoutes'));
 
-// 3. Add new routes for serving Handlebars templates
-app.get('/', (req, res) => {
-  res.render('main');
+// new routes for serving Handlebars templates
+app.get('/main', (req, res) => {
+  res.render('main'); // You can use the view name directly here
 });
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login'); // You can use the view name directly here
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup'); // You can use the view name directly here
 });
 
-// Error-handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+
+
 
 // Error-handling middleware
 app.use((err, req, res, next) => {
