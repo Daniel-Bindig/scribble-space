@@ -37,11 +37,11 @@ const MySQLStore = require('express-mysql-session')(session);
 
 // Initialize session store
 const sessionStore = new MySQLStore({
-  host: process.env.SESSION_DB_HOST,
-  port: process.env.SESSION_DB_PORT,
-  user: process.env.SESSION_DB_USER,
-  password: process.env.SESSION_DB_PASSWORD,
-  database: process.env.SESSION_DB_NAME
+  host: "localhost",
+  port: "3306",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 
@@ -49,7 +49,7 @@ const sessionStore = new MySQLStore({
 app.use(
   session({
     key: 'my_app_session',  
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.session_secret || crypto.randomBytes(64).toString('hex'),
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
@@ -61,8 +61,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Fixed Configuring the Handlebars engine
-app.engine('handlebars', exphbs.engine());
-app.set('views', path.join(__dirname, 'layouts')); 
+app.engine('handlebars', exphbs.engine({
+  layoutsDir: path.join(__dirname, 'views/'),
+  defaultLayout: 'main',
+  partialsDir: path.join(__dirname, 'views/partials/')
+}));
 app.set('view engine', 'handlebars');
 
 // Routes
