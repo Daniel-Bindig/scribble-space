@@ -1,76 +1,95 @@
 const express = require('express');
 const router = express.Router();
-const Task = require('../models/Task');  // Import your Sequelize Task model
+const bcrypt = require('bcrypt');
+const User = require('../models/user');  
+const saltRounds = 10;  // Number of sa
 
-// GET route to fetch all tasks
-router.get('/tasks', async (req, res) => {
+
+router.get('/users', async (req, res) => {
   try {
-    const tasks = await Task.findAll();
-    res.json(tasks);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error fetching tasks');
+    const users = await User.findAll();  
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error("There was an error fetching users", error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-// GET route to fetch a single task by ID
-router.get('/tasks/:id', async (req, res) => {
-  try {
-    const task = await Task.findByPk(req.params.id);
-    if (task) {
-      res.json(task);
-    } else {
-      res.status(404).send('Task not found');
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error fetching task');
-  }
-});
 
-// POST route to create a new task
-router.post('/tasks', async (req, res) => {
-  try {
-    const newTask = await Task.create(req.body);
-    res.status(201).json(newTask);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error creating task');
-  }
-});
+// Create a new user
+router.post('/users', async (req, res) => {
+  const { username, email, password } = req.body;
 
-// PUT route to update a task by ID
-router.put('/tasks/:id', async (req, res) => {
+  // Hash the password
+  const hash = await bcrypt.hash(password, saltRounds);
+
   try {
-    const updatedTask = await Task.update(req.body, {
-      where: { id: req.params.id }
+    const newUser = await User.create({
+      username,
+      email,
+      passwordHash: hash  
     });
-    if (updatedTask) {
-      res.json(updatedTask);
-    } else {
-      res.status(404).send('Task not found');
-    }
+    res.status(201).json({ message: 'User created', user: newUser });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error updating task');
+    res.status(500).json({ message: 'Error creating user', error: err });
   }
 });
 
-// DELETE route to delete a task by ID
-router.delete('/tasks/:id', async (req, res) => {
+// Update a user by ID
+router.put('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, email, password } = req.body;
+
   try {
-    const deletedTask = await Task.destroy({
-      where: { id: req.params.id }
-    });
-    if (deletedTask) {
-      res.json({ message: 'Task deleted' });
-    } else {
-      res.status(404).send('Task not found');
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    // If password is part of the update, hash the new password
+    if (password) {
+      const hash = await bcrypt.hash(password, saltRounds);
+      user.passwordHash = hash;
+    }
+
+    // Update other fields
+    if (username) user.username = username;
+    if (email) user.email = email;
+
+    await user.save();
+    
+    res.status(200).json({ message: `User ${id} updated`, user: user });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error deleting task');
+    res.status(500).json({ message: 'Error updating user', error: err });
   }
+});
+
+
+
+// Delete a user by ID
+router.delete('/users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await user.destroy();
+    
+    res.status(200).json({ message: `User ${id} deleted` });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting user', error: err });
+  }
+});
+
+router.get('/resource', (req, res) => {
+  res.json({ message: 'Your GET response data here' });
 });
 
 module.exports = router;

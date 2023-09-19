@@ -1,16 +1,13 @@
-const express = require('express');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-const { Sequelize, DataTypes } = require('sequelize');
-const authRoutes = require('./routes/authRoutes');
+const http = require('http');
+const app = require('./app');  
 
+// Initialize HTTP server
+const server = http.createServer(app);
 
-// server.js
+// Port setup
+const PORT = process.env.PORT || 3000;
 
-const app = require('./app'); // Import the app from app.js
-
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+// Start the server
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
