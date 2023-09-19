@@ -1,6 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/connection.js');
 const Entry = require('./entry.js');
+const User = require('./user.js');
 
 class Share extends Model {}
 
@@ -24,11 +25,11 @@ Share.init({
       model: User,
       key: 'id'
     },
-    allowNull: false
+    allowNull: true
   },
   accessKey: {
     type: DataTypes.STRING(255),
-    allowNull: false
+    allowNull: true
   },
   createdAt: {
     type: DataTypes.DATE,
