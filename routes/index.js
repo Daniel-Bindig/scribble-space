@@ -1,5 +1,9 @@
 const express = require('express');
-const router = express.Router();
+
+// Initialize Routers
+const mainRouter = express.Router();
+const unauthenticatedRouter = express.Router();
+const authenticatedRouter = express.Router();
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
@@ -9,18 +13,24 @@ const isAuthenticated = (req, res, next) => {
   return res.status(401).json({ message: "Unauthenticated" });
 };
 
-//router.use(isAuthenticated);
-
-// Routes
-//const entry = require('./entry');
-//const reminder = require('./reminder');
+// Register Unauthenticated Routes
+//const share = require('./share');
 const auth = require('./auth');
 const user = require('./user');
-// Add any others here
+//unauthenticatedRouter.use('/share', share);
+unauthenticatedRouter.use('/auth', auth);
+unauthenticatedRouter.use('/user', user);
 
-//router.use('/entry', entry);
-//router.use('/reminder', reminder);
-router.use('/auth', auth);
-router.use('/user', user);
+// Register Authenticated Routes
+authenticatedRouter.use(isAuthenticated); // Apply authentication middleware
+//const entry = require('./entry');
+//const reminder = require('./reminder');
+// Add any other authenticated routes here
+//authenticatedRouter.use('/entry', entry);
+//authenticatedRouter.use('/reminder', reminder);
 
-module.exports = router;
+// Register Main Router
+mainRouter.use('/', unauthenticatedRouter); // Unauthenticated routes
+mainRouter.use('/', authenticatedRouter); // Authenticated routes
+
+module.exports = mainRouter;
