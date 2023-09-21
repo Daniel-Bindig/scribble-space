@@ -9,6 +9,7 @@ const passport = require('passport');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
+const { scheduleNotifications } = require('./config/push');
 require('dotenv').config();
 
 // Database setup
@@ -116,6 +117,21 @@ app.post('/login', (req, res) => {
   
   res.redirect('/');
 });
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connected...');
+    return sequelize.sync();
+  })
+  .then(() => {
+    // Schedule notifications after the database is connected and synchronized
+    scheduleNotifications();
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 
 
 app.use('/', routes);
