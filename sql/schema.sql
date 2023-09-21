@@ -33,3 +33,15 @@ CREATE TABLE Reminders (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (entryId) REFERENCES Entries(id)
 );
+
+-- SharedEntries table for storing shared entries
+CREATE TABLE SharedEntries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    entryId INT,
+    sharedUserId INT,
+    accessKey VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (entryId) REFERENCES Entries(id),
+    FOREIGN KEY (sharedUserId) REFERENCES Users(id)
+);

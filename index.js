@@ -1,16 +1,14 @@
-// Required modules
 const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const path = require('path');
+
 const passport = require('passport');
-const dotenv = require('dotenv');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
-const routes = require('./routes');
 require('dotenv').config();
 
 // Database setup
@@ -20,10 +18,14 @@ require('dotenv').config();
 require('./config/passport-setup');
 
 // Initialize Express app
+=======
+const routes = require('./routes');
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 
 // Middleware
 app.use(helmet());
@@ -46,9 +48,11 @@ app.use(session({
   key: 'my_app_session',
   secret: process.env.session_secret || crypto.randomBytes(64).toString('hex'),  // Use random string if no secret is provided
   store: sessionStore,
+
   resave: false,
   saveUninitialized: true
 }));
+
 
 // Initialize Passport and restore authentication state from the session
 app.use(passport.initialize());
@@ -64,12 +68,6 @@ app.engine('handlebars', exphbs.engine({
 app.set('view engine', 'handlebars');
 
 app.use(express.json());
-
-// Routes
-app.use('/', routes);
-
-
-
 
 // Error-handling middleware
 // app.use((err, req, res, next) => {
@@ -89,7 +87,39 @@ app.use('/', routes);
 //   });
 
 
+app.get('/', (req, res) => {
+  res.render('content/landing');
+});
 
+app.get('/login', (req, res) => {
+  res.render('content/login');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('content/signup');
+});
+
+app.get('/test', (req, res) => {
+  res.render('content/test');
+});
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  console.log("Caught login request with username: " + email + " and password: " + password)
+
+  // Store info in session
+  req.session.email = "text@example.com";
+  req.session.userId = 1;
+  req.session.username = "testuser";
+
+  console.log(req.session.username)
+  
+  res.redirect('/');
+});
+
+
+app.use('/', routes);
 
 app.listen(3000, () => {
   console.log('The application is running on localhost:3000!')

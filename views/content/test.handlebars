@@ -1,0 +1,62 @@
+<main>
+    <div class="form-card">
+        <h2 id="api-test-heading">TEST REQUEST</h2>
+        <form id="api-test-form">
+            <div class="form-group">
+                <label for="request-type">Request Type:</label>
+                <br>
+                <select id="request-type" class="form-input">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="endpoint">Endpoint:</label>
+                <br>
+                <input type="text" id="endpoint" class="form-input"/>
+            </div>
+            <div class="form-group">
+                <label for="custom-data">Custom Data (JSON format):</label>
+                <br>
+                <textarea id="custom-data" class="form-input"></textarea>
+            </div>
+            <div>
+                <button type="button" id="test-button" class="btn">TEST</button>
+            </div>
+        </form>
+        <div id="response-container">
+            <h3 id="response-heading">Response:</h3>
+            <div id="response-body">
+        </div>
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('api-test-form');
+        const testButton = document.getElementById('test-button');
+        
+        testButton.addEventListener('click', async () => {
+            const requestType = document.getElementById('request-type').value;
+            const endpoint = document.getElementById('endpoint').value;
+            const customData = JSON.parse(document.getElementById('custom-data').value || '{}');
+            
+            const requestOptions = {
+                method: requestType,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(customData)
+            };
+
+            if (requestType === 'GET' || requestType === 'DELETE') {
+                delete requestOptions.body;
+            }
+            
+            const response = await fetch(endpoint, requestOptions);
+            const data = await response.json();
+
+            document.getElementById('response-body').innerHTML = JSON.stringify(data, null, 4);
+            
+        });
+    });
+</script>

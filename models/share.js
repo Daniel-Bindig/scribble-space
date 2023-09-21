@@ -1,10 +1,11 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/connection.js');
 const Entry = require('./entry.js');
+const User = require('./user.js');
 
-class Reminder extends Model {}
+class Share extends Model {}
 
-Reminder.init({
+Share.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -18,13 +19,17 @@ Reminder.init({
     },
     allowNull: false
   },
-  reminderTime: {
-    type: DataTypes.DATE,
-    allowNull: false
+  sharedUserId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id'
+    },
+    allowNull: true
   },
-  isCompleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  accessKey: {
+    type: DataTypes.STRING(255),
+    allowNull: true
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -37,11 +42,12 @@ Reminder.init({
   }
 }, {
   sequelize,
-  modelName: 'Reminder',
-  tableName: 'Reminders',
+  modelName: 'Share',
+  tableName: 'SharedEntries',
   timestamps: true
 });
 
-Reminder.belongsTo(Entry, { foreignKey: 'entryId' });
+Share.belongsTo(Entry, { foreignKey: 'entryId' });
+Share.belongsTo(User, { foreignKey: 'sharedUserId' });
 
-module.exports = Reminder;
+module.exports = Share;

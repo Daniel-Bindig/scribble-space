@@ -14,7 +14,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 // Register Unauthenticated Routes
-//const share = require('./share');
+const share = require('./share');
 const auth = require('./auth');
 const user = require('./user');
 //unauthenticatedRouter.use('/share', share);
@@ -23,14 +23,16 @@ unauthenticatedRouter.use('/user', user);
 
 // Register Authenticated Routes
 authenticatedRouter.use(isAuthenticated); // Apply authentication middleware
-//const entry = require('./entry');
-//const reminder = require('./reminder');
+const entry = require('./entry');
+const reminder = require('./reminder');
 // Add any other authenticated routes here
-//authenticatedRouter.use('/entry', entry);
-//authenticatedRouter.use('/reminder', reminder);
+authenticatedRouter.use('/entry', entry);
+authenticatedRouter.use('/reminder', reminder);
+
 
 // Register Main Router
 mainRouter.use('/', unauthenticatedRouter); // Unauthenticated routes
 mainRouter.use('/', authenticatedRouter); // Authenticated routes
+
 
 module.exports = mainRouter;
