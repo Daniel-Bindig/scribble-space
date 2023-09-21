@@ -152,6 +152,10 @@ nav .navbar {
     border-right: 1px solid #444fca;
 }
 
+.menu li a {
+    color: #000000;
+}
+
 .menu li:last-child {
     margin-right: 0;
 }
@@ -203,7 +207,7 @@ nav .navbar {
 #content-area {
     width: 73.5%;
     float: right;
-    height: calc(95vh - 85px);
+    height: auto;
     border: 1px solid blue;
     margin: 0;
     margin-right: 15px;
@@ -213,11 +217,12 @@ nav .navbar {
 
 #calendar-container {
     margin: 50px;
+    height: auto;
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 20px;
     padding-bottom: 20px;
-    background-color: var(--quatrinary);
+    background-color: var(--secondary);
     border-radius: 10px;
     font-family: 'handlee';
 }
