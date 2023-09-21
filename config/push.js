@@ -1,8 +1,8 @@
 const cron = require('node-cron');
 const webpush = require('web-push');
-const { Reminder } = require('./models/reminder');  
+const { Reminder } = require('../models/reminder');  
 const { Op } = require('sequelize');
-const sequelize = require('./database'); 
+//const sequelize = require('../database'); 
 
 // Initialize web-push
 webpush.setVapidDetails(
