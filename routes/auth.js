@@ -25,7 +25,13 @@ router.post('/signup', async (req, res) => {
       email,
       passwordHash: hash
     });
-    res.redirect('/auth/login');  // Redirect to login page
+    // Log in user after signup and redirect to dashboard
+    req.logIn(newUser, function(err) {
+      if (err) { 
+        return next(err); 
+      }
+      return res.redirect('/');
+    });
   }  catch (err) {
     res.status(500).json({ message: 'Error creating user', error: err });
   }
@@ -50,13 +56,23 @@ router.get('/login', (req, res) => {
   res.render('content/login');
 });
 
-// Login Route
-router.post('/login', 
-  passport.authenticate('local', {
-    failureRedirect: '/auth/login-failure',
-    successRedirect: '/auth/login-success'
-  })
-);
+// Login route
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { 
+      return next(err); 
+    }
+    if (!user) { 
+      return res.render('content/login', { message: 'Incorrect username or password' });
+    }
+    req.logIn(user, function(err) {
+      if (err) { 
+        return next(err); 
+      }
+      return res.redirect('/');
+    });
+  })(req, res, next);
+});
 
 // GET: Fetch details of currently logged-in user
 router.get('/user/details', (req, res) => {
@@ -65,14 +81,6 @@ router.get('/user/details', (req, res) => {
   } else {
     res.status(401).json({ message: 'Not authenticated' });
   }
-});
-
-router.get('/login-success', (req, res) => {
-  res.send('Login successful');
-});
-
-router.get('/login-failure', (req, res) => {
-  res.send('Login failed');
 });
 
 // Logout Route
