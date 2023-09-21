@@ -42,6 +42,15 @@
     --fc-now-indicator-color: red;
 }
 
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
 html body {
     height: 100%;
     background-color: var(--secondary);
@@ -116,22 +125,31 @@ form .form-group {
 
 --- DASHBOARD CSS --- 
 
+.upper-container {
+    height: 100px;
+}
+
+#container1 {
+    background-color: #e8efef;
+}
+
 nav .navbar {
     padding: 10px 0px;
 }
 
 .menu {
-    background-color: black;
+    background-color: #ccdbff;
     list-style-type: none;
-    padding: 10px 0px;
+    padding: 18px 0px;
     margin-top: 0px;
+    margin-bottom: 10px;
 }
 
 .menu li {
     display: inline;
     margin-right: 20px;
     padding-right: 25px;
-    border-right: 1px solid white;
+    border-right: 1px solid #444fca;
 }
 
 .menu li:last-child {
@@ -139,8 +157,11 @@ nav .navbar {
 }
 
 .menu a {
-    color: white;
+    color: #e8efef;
     text-decoration: none;
+    font-family: 'handlee';
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .menu a:hover {
@@ -148,15 +169,44 @@ nav .navbar {
 }
 
 .lower-container {
+    flex: 1;
     width: 100%;
+    margin: 0 auto;
+    overflow-x: hidden;
+    background-color: #e8efef;
+}
 
+#selected-option {
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 5px;
+    font-family: 'handlee';
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #444fca;
+}
+
+#edit-area,
+#content-area {
+    background-color: #EAEBEC;
+}
+
+#edit-area {
+    width: 23.5%;
+    float: left;
+    margin-left: 15px;
+    height: calc(95vh - 85px);
+    border: 1px solid green;
 }
 
 #content-area {
-    width: 100%;
-
+    width: 73.5%;
+    float: right;
+    height: calc(95vh - 85px);
     border: 1px solid blue;
     margin: 0;
+    margin-right: 15px;
     overflow-y: hidden;
     overflow-x: hidden;
 }
