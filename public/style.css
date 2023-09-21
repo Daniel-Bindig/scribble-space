@@ -2,7 +2,7 @@
     --primary: #4d433c;
     --secondary: #f3e5b8;
     --tertiary: #634b3d;
-    --quatrinary: #bdb083;
+    --quatrinary: #f8f5e9;
     --light: #e3e4e3;
     --dark: #182c23;
     --error: rgb(228, 46, 1);
@@ -149,14 +149,12 @@ nav .navbar {
 
 .lower-container {
     width: 100%;
-    height: 90%;
-    margin: 0 auto;
-    overflow-x: hidden;
+
 }
 
 #content-area {
     width: 100%;
-    height: calc(100vh - 70px);
+
     border: 1px solid blue;
     margin: 0;
     overflow-y: hidden;
@@ -165,6 +163,11 @@ nav .navbar {
 
 #calendar-container {
     margin: 50px;
-    background-color: white;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: var(--quatrinary);
+    border-radius: 10px;
     font-family: 'handlee';
 }
