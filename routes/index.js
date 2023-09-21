@@ -15,7 +15,11 @@ const isAuthenticated = (req, res, next) => {
 
 // Register Unauthenticated Routes
 const share = require('./share');
-unauthenticatedRouter.use('/share', share);
+const auth = require('./auth');
+const user = require('./user');
+//unauthenticatedRouter.use('/share', share);
+unauthenticatedRouter.use('/auth', auth);
+unauthenticatedRouter.use('/user', user);
 
 // Register Authenticated Routes
 authenticatedRouter.use(isAuthenticated); // Apply authentication middleware
@@ -25,8 +29,10 @@ const reminder = require('./reminder');
 authenticatedRouter.use('/entry', entry);
 authenticatedRouter.use('/reminder', reminder);
 
+
 // Register Main Router
 mainRouter.use('/', unauthenticatedRouter); // Unauthenticated routes
 mainRouter.use('/', authenticatedRouter); // Authenticated routes
+
 
 module.exports = mainRouter;
