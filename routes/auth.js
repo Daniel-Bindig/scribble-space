@@ -9,7 +9,7 @@ const saltRounds = 10;
 
 // Signup Route - Display Signup Form
 router.get('/signup', (req, res) => {
-  res.render('signup'); // Renders the "signup.handlebars" template
+  res.render('content/signup');
 });
 
 // Signup Route
@@ -47,9 +47,8 @@ router.get('/user/:id', async (req, res) => {
 
 // Login Route - Display Login Form
 router.get('/login', (req, res) => {
-  res.render('login'); // Renders the "login.handlebars" template
+  res.render('content/login');
 });
-
 
 // Login Route
 router.post('/login', 
@@ -67,7 +66,6 @@ router.get('/user/details', (req, res) => {
     res.status(401).json({ message: 'Not authenticated' });
   }
 });
-
 
 router.get('/login-success', (req, res) => {
   res.send('Login successful');
