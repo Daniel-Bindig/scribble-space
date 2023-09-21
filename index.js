@@ -13,7 +13,7 @@ const { scheduleNotifications } = require('./config/push');
 require('dotenv').config();
 
 // Database setup
-//const { sequelize } = require('./database');
+const { sequelize } = require('./database');
 
 // Passport config
 require('./config/passport-setup');
@@ -70,22 +70,10 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 
 // Error-handling middleware
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send('Something broke!');
-// });
-
-// // Test database connection and synchronize models
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('Database connected...');
-//     return sequelize.sync();
-//   })
-//   .catch((err) => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 app.get('/', (req, res) => {
   res.render('content/landing');
@@ -95,7 +83,7 @@ app.get('/test', (req, res) => {
   res.render('content/test');
 });
 
-
+// Test database connection and synchronize models
 sequelize
   .authenticate()
   .then(() => {
