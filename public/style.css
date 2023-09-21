@@ -6,6 +6,8 @@
     --light: #e3e4e3;
     --dark: #182c23;
     --error: rgb(228, 46, 1);
+    
+    /*Calendar CSS*/
     --fc-small-font-size: .85em;
     --fc-page-bg-color: #fff;
     --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
@@ -159,4 +161,10 @@ nav .navbar {
     margin: 0;
     overflow-y: hidden;
     overflow-x: hidden;
+}
+
+#calendar-container {
+    margin: 50px;
+    background-color: white;
+    font-family: 'handlee';
 }
