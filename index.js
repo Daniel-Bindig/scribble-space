@@ -91,32 +91,10 @@ app.get('/', (req, res) => {
   res.render('content/landing');
 });
 
-app.get('/login', (req, res) => {
-  res.render('content/login');
-});
-
-app.get('/signup', (req, res) => {
-  res.render('content/signup');
-});
-
 app.get('/test', (req, res) => {
   res.render('content/test');
 });
 
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  
-  console.log("Caught login request with username: " + email + " and password: " + password)
-
-  // Store info in session
-  req.session.email = "text@example.com";
-  req.session.userId = 1;
-  req.session.username = "testuser";
-
-  console.log(req.session.username)
-  
-  res.redirect('/');
-});
 
 sequelize
   .authenticate()
@@ -131,7 +109,6 @@ sequelize
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
-
 
 
 app.use('/', routes);

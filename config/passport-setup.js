@@ -25,9 +25,9 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new LocalStrategy(
   async function(username, password, done) {
     try {
-      const user = await User.findOne({ where: { username: username } });
+      const user = await User.findOne({ where: { email: username } });
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return done(null, false, { message: 'Incorrect email.' });
       }
 
       const isValid = await bcrypt.compare(password, user.passwordHash);
