@@ -18,7 +18,6 @@ require('dotenv').config();
 require('./config/passport-setup');
 
 // Initialize Express app
-=======
 const routes = require('./routes');
 
 const app = express();
