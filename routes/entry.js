@@ -72,6 +72,20 @@ router.delete('/:id', async (req, res) => {
   res.json({ message: "Deleted entry" });
 });
 
+//FullCalendar setup
+router.get('/calendarEvents', async (req, res) => {
+  const entries = await Entry.findAll({
+    where: { userId: req.session.userId },
+    attributes: ['id', 'title', 'createdAt']
+  });
 
+  const events = entries.map(entry => ({
+    id: entry.id,
+    title: entry.title,
+    start: entry.createdAt,
+  }));
+
+  res.json(events);
+});
 
 module.exports = router;
