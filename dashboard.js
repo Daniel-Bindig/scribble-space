@@ -1,6 +1,15 @@
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth'
+    });
+    calendar.render();
+  });
+
 const menuItems = document.querySelectorAll('.menu li a');
 const contentArea = document.getElementById('content-area');
 const selectedOption = document.getElementById('selected-option');
+const calendarContainer = document.getElementById('calendar-container');
 
 menuItems.forEach(item => {
     item.addEventListener('click', event => {
@@ -10,6 +19,9 @@ menuItems.forEach(item => {
 
         const optionText = item.textContent;
         selectedOption.textContent = optionText;
+
+        //default hidden until 'calendar' is clicked
+        calendarContainer.style.display = 'none';
 
         contentArea.innerHTML = '';
 

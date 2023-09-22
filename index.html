@@ -9,44 +9,57 @@
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower:regular" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Handlee:regular" rel="stylesheet" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-          });
-          calendar.render();
-        });
-  
-    </script>
 </head>
 
 <body>
+    <header>
+
+    </header>
     <main>
-        <div class="upper-container">
-            <nav class="navbar">
-                <ul class="menu">
-                    <li><a href="#" id="home-tab">Home</a></li>
-                    <li><a href="#" id="calendar-tab">Calendar</a></li>
-                    <li><a href="#" id="notes-tab">Notes</a></li>
-                    <li><a href="#" id="notifications-tab">Notifications</a></li>
-                </ul>
-            </nav>
+        <h1 class="heading-text">Scribble Space</h1>
+        <div id="description">
+            <p>
+                Scribble Space is an online diary that can be used to to keep yourself organised and give you live reminders on your desktop.
+            </p>
         </div>
-        <div class="lower-container">
-            <div id="event-form-container"></div>
-            <div id="content-area">
-                <div id="calendar-container">
-                    <div id="calendar"></div>
+        <div id="btn-container">
+            <button class="btn">
+                LOGIN
+            </button>
+            <p>Or</p>
+            <button class="btn">
+                SIGN UP
+            </button>
+        </div>
+        <div class="form-card">
+            <h2 id="login-heading">LOGIN</h2>
+            <form>
+                <div class="form-group">
+                    <label for="email-login">Email:</label>
+                    <br>
+                    <input type="text" class="form-input" />
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <br>
+                    <input type="text" class="form-input" />
+                    <script src="./dashboard.js"></script>
+                    <script src="./dashboard.js"></script>
+                </div>
+                <div>
+                    <button class="btn">LOGIN</button>
+                </div>
+                <div>
+                    <p>
+                        Don't have an account? <a href="">Sign Up</a>
+                    </p>
+                </div>
+            </form>
         </div>
     </main>
     <footer>
 
     </footer>
-
+    <script src="./dashboard.js"></script>
 </body>
-<script src="./dashboard.js"></script>
 </html>
