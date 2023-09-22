@@ -28,9 +28,15 @@ app.set('view engine', 'handlebars');
 
 app.use(express.json());
 
+// Check if user is authenticated, if they are send them to content/dashboard
+// Otherwise, send them to content/landing
 app.get('/', (req, res) => {
-  res.render('content/landing');
-});
+  if (req.session && req.session.username) {
+    res.render('content/dashboard');
+  } else {
+    res.render('content/landing');
+  }
+})
 
 app.get('/login', (req, res) => {
   res.render('content/login');
