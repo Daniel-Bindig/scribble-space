@@ -1,4 +1,6 @@
 const calendarEl = document.getElementById('calendar');
+const editButtons = document.querySelector('.edit-buttons');
+var selectedDate = new Date();
 const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     dateClick: function(info) {
@@ -9,18 +11,19 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     },
     // date selected
     select: function(info) {
+        editButtons.classList.remove('invisible');
         // Get all events for selected date
         const events = calendar.getEvents();
-        const selectedDate = info.start;
+        const currentDate = info.start;
+        selectedDate = currentDate;
         const selectedEntries = events.filter(event => {
-            return event.start.toDateString() === selectedDate.toDateString();
+            return event.start.toDateString() === currentDate.toDateString();
         }
         );
-        // Clear left panel
-        const entriesPanel = document.querySelector('#entries');
-        entriesPanel.innerHTML = '';
 
         // Populate left panel with events
+        const entriesPanel = document.querySelector('#entries');
+        entriesPanel.innerHTML = '';
         selectedEntries.forEach(async(entry) => {
             const clone = await renderEntry(entry);
             entriesPanel.appendChild(clone);
@@ -28,10 +31,9 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     },
     // date unselected
     unselect: function(info) {
-        console.log(info);
+        editButtons.classList.add('invisible');
     },
   });
-calendar.render();
 
 function clearCalendar(){
     calendar.getEvents().forEach(event => {
@@ -39,19 +41,21 @@ function clearCalendar(){
     });
 }
 
+const createButton = document.querySelector('#create-entry-button');
+createButton.addEventListener('click', () => {
+    showCreateModal(selectedDate);
+});
 
 async function renderEntry(entry){
-    // Get template element
-    const template = document.querySelector('#entry-template');
     // Clone template
+    const template = document.querySelector('#entry-template');
     const clone = template.cloneNode(true);
-    // Remove hidden class
     clone.classList.remove('hidden');
+    clone.id = '';
+
     // Populate clone with event data
     const title = clone.querySelector('.entry-title');
     const content = clone.querySelector('.entry-content');
-    //const tags = clone.querySelector('.entry-tags');
-    //const date = clone.querySelector('.entry-date');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
 
@@ -61,25 +65,15 @@ async function renderEntry(entry){
 
     title.textContent = fullEntry.title;
     content.textContent = fullEntry.content;
-    //tags.textContent = fullEntry.tags;
-    // date.textContent = entry.start.toLocaleDateString('en-US', {
-    //     year: 'numeric',
-    //     month: 'long',
-    //     day: 'numeric'
-    // });
-    // Add event listeners
-    // editButton.addEventListener('click', () => {
-    //     showEditModal(entry.start);
-    // });
+
     deleteButton.addEventListener('click', () => {
         clone.remove();
         deleteEntry(entry.id).then(response => {
             refreshCalendar();
         });
     });
-    // Append clone to left panel
+
     return clone;
-    //entriesPanel.appendChild(clone);
 }
 
 function loadEntryPreviews(){
@@ -103,18 +97,6 @@ async function getEntryById(id) {
     const data = await response.json();
     return data;
 }
-
-// Delete entry
-// router.delete('/:id', async (req, res) => {
-//     const entry = await Entry.findOne({
-//       where: {
-//         id: req.params.id,
-//         userId: req.user.id
-//       }
-//     });
-//     await entry.destroy();
-//     res.json({ message: "Deleted entry" });
-//   });
 
 async function deleteEntry(id){
     const response = fetch(`/entry/${id}`, {
@@ -154,9 +136,6 @@ function refreshCalendar(){
     clearCalendar();
     loadEntryPreviews();
 }
-
-
-refreshCalendar();
 
 function showEditModal(date){
     const modal = document.getElementById('edit-modal');
@@ -214,56 +193,7 @@ function showCreateModal(date) {
   
     modal.querySelector('#edit-date').textContent = readableDate;
     modal.showModal();
-  }
-  
+}
 
-
-// const menuItems = document.querySelectorAll('.menu li a');
-// const contentArea = document.getElementById('content-area');
-// const selectedOption = document.getElementById('selected-option');
-// const calendarContainer = document.getElementById('calendar-container');
-
-// menuItems.forEach(item => {
-//     item.addEventListener('click', event => {
-//         event.preventDefault();
-
-//         const contentType = item.getAttribute('data-content');
-
-//         const optionText = item.textContent;
-//         selectedOption.textContent = optionText;
-
-//         //default hidden until 'calendar' is clicked
-//         calendarContainer.style.display = 'none';
-
-//         contentArea.innerHTML = '';
-
-//         switch (contentType) {
-//             case 'home-tab':
-//                 contentArea.innerHTML = 'homepage content';
-//                 break;
-//             case 'calendar-tab':
-//                 contentArea.innerHTML = 'calendar content';
-//                 break;
-//             case 'notes-tab':
-//                 contentArea.innerHTML = 'notes content';
-//                 break;
-//             case 'notifications-tab':
-//                 contentArea.innerHTML = 'notifications content';
-//                 break;
-//             default:
-//                 contentArea.innerHTML = 'Default Content';
-//         }
-//     });
-// });
-
-
-
-// TODO: Add "Create new event" button to left panel
-// When clicked, open modal with form to create new event
-
-// Sequence of events:
-// On page load: pull down preview events from server and populate the calendar days with them, including the event IDs
-// When a day is clicked: pull down the events for that day and populate the left side panel with them
-// Note that user can click on a day with no entries, and nothing should occur
-// When an entry in the left panel is clicked, open a modal for viewing/editing the event. Including a share button
-// Share function to be implemented by Alex
+calendar.render();
+refreshCalendar();
