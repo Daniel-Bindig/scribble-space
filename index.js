@@ -26,9 +26,17 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-
 // Middleware
-app.use(helmet());
+
+// Whitelist remote scripts
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["*"],
+    // https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
+    //scriptSrc: ["self", "'sha256-ZjA0NzFmMjA5NDU2Y2FmOWVlZmQ0ZDBlYjFmMGE0ZDM5Yzc1MjQ2NTY2NzgyZDlhZWVjMjUwMWViNmQ2NjEyMA=='"]
+    scriptSrc: ["*"],
+  }
+}));
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));

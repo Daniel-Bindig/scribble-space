@@ -7,7 +7,7 @@ const authenticatedRouter = express.Router();
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
-  if (req.session && req.session.username) {
+  if (req.session && req.session.passport && req.session.passport.user) {
     return next();
   }
   return res.status(401).json({ message: "Unauthenticated" });

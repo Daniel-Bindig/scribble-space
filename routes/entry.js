@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   const entries = await Entry.findAll({
     where: {
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   res.json(entries);
@@ -14,9 +14,10 @@ router.get('/', async (req, res) => {
 
 // Get all entries preview (without content)
 router.get('/preview', async (req, res) => {
+  console.log(req.user.id)
   const entries = await Entry.findAll({
     where: {
-      userId: req.session.userId
+      userId: req.user.id
     },
     attributes: ['id', 'title', 'tags', 'createdAt', 'updatedAt', 'entryDate']
   });
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res) => {
   const entry = await Entry.findOne({
     where: {
       id: req.params.id,
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   res.json(entry);
@@ -37,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // Create entry
 router.post('/', async (req, res) => {
   const entry = await Entry.create({
-    userId: req.session.userId,
+    userId: req.user.id,
     title: req.body.title,
     content: req.body.content,
     tags: req.body.tags,
@@ -51,7 +52,7 @@ router.put('/:id', async (req, res) => {
   const entry = await Entry.findOne({
     where: {
       id: req.params.id,
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   entry.title = req.body.title;
@@ -67,7 +68,7 @@ router.delete('/:id', async (req, res) => {
   const entry = await Entry.findOne({
     where: {
       id: req.params.id,
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   await entry.destroy();

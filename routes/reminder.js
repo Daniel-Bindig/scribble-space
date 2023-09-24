@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
       {
         model: Entry,
         attributes: [],
-        where: { userId: req.session.userId },
+        where: { userId: req.user.id },
       },
     ]
   });
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
       {
         model: Entry,
         attributes: [],
-        where: { userId: req.session.userId },
+        where: { userId: req.user.id },
       },
     ]
   });
@@ -48,7 +48,7 @@ router.get('/entry/:id', async (req, res) => {
       {
         model: Entry,
         attributes: [],
-        where: { userId: req.session.userId },
+        where: { userId: req.user.id},
       },
     ]
   });
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
   const entry = await Entry.findOne({
     where: {
       id: req.body.entryId,
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   if (!entry) {
@@ -86,7 +86,7 @@ router.put('/:id', async (req, res) => {
       {
         model: Entry,
         attributes: [],
-        where: { userId: req.session.userId },
+        where: { userId: req.user.id },
       },
     ]
   });
@@ -109,7 +109,7 @@ router.delete('/:id', async (req, res) => {
       {
         model: Entry,
         attributes: [],
-        where: { userId: req.session.userId },
+        where: { userId: req.user.id },
       },
     ]
   });

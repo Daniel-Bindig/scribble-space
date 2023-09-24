@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
   const entry = await Entry.findOne({
     where: {
       id: req.body.entryId,
-      userId: req.session.userId
+      userId: req.user.id
     }
   });
   if (!entry) {
