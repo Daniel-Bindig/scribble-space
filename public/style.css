@@ -47,11 +47,14 @@
 }
 
 body {
-    margin: 0;
+    margin: 10px;
     padding: 0;
 }
 
 html body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     height: 100%;
     background-color: var(--secondary);
     margin: 0px;
@@ -301,3 +304,40 @@ div#event-form-container {
     justify-content: space-between;
     align-items: center;
 }
+
+/* Footer Styles */
+footer {
+    margin-top: auto;
+    background-color: var(--dark);
+    color: var(--light);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: var(--light);
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 10px;
+    font-family: 'handlee';
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
