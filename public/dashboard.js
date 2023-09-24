@@ -65,6 +65,15 @@ async function renderEntry(entry){
     const deleteButton = clone.querySelector('.delete-button');
     const reminderButton = clone.querySelector('.reminder-button');
 
+    // Fetch notification status
+    getReminderByEntryId(entry.id).then(reminder => {
+        console.log(reminder);
+        if(reminder.length > 0){
+            clone.querySelector('.reminder-button > img').src = '/img/bell-on.svg';
+            reminderButton.dataset.reminderid = reminder[0].id;
+        }
+    });
+
     // Fetch event data
     const fullEntry = await getEntryById(entry.id);
     console.log(fullEntry);
@@ -83,8 +92,19 @@ async function renderEntry(entry){
         showEditModal(fullEntry);
     });
 
+    // Toggle reminder state
     reminderButton.addEventListener('click', () => {
-        createReminder(entry.id, entry.start);
+        if(reminderButton.dataset.reminderid !== '0'){
+            reminderButton.dataset.reminderid = '0';
+            reminderButton.querySelector('img').src = '/img/bell.svg';
+            deleteReminder(entry.id);
+        } else {
+            const reminderId = createReminder(entry.id, entry.start);
+            console.log(reminderId);
+            reminderButton.dataset.reminderid = toString(reminderId);
+            reminderButton.querySelector('img').src = '/img/bell-on.svg';
+            
+        }
     });
 
     return clone;
@@ -178,6 +198,19 @@ function createReminder(entryId, reminderTime){
     .then(data => {
         return data;
     });
+}
+
+async function getReminderByEntryId(id){
+    const response = await fetch(`/reminder/entry/${id}`);
+    const data = await response.json();
+    return data;
+}
+
+async function deleteReminder(id){
+    const response = fetch(`/reminder/${id}`, {
+        method: 'DELETE'
+    });
+    return response;
 }
 
 function refreshCalendar(){
