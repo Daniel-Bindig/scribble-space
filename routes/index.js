@@ -21,6 +21,11 @@ const user = require('./user');
 unauthenticatedRouter.use('/auth', auth);
 unauthenticatedRouter.use('/user', user);
 
+// Other static routes
+unauthenticatedRouter.get('/attributions', (req, res) => {res.render('content/attributions');});
+unauthenticatedRouter.get('/about', (req, res) => {res.render('content/about');});
+unauthenticatedRouter.get('/github', (req, res) => {res.redirect('https://github.com/Daniel-Bindig/scribble-space');});
+
 // Register Authenticated Routes
 authenticatedRouter.use(isAuthenticated); // Apply authentication middleware
 const entry = require('./entry');

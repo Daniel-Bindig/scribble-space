@@ -18,7 +18,7 @@ router.get('/preview', async (req, res) => {
     where: {
       userId: req.session.userId
     },
-    attributes: ['id', 'title', 'tags', 'createdAt', 'updatedAt']
+    attributes: ['id', 'title', 'tags', 'createdAt', 'updatedAt', 'entryDate']
   });
   res.json(entries);
 });
@@ -40,7 +40,8 @@ router.post('/', async (req, res) => {
     userId: req.session.userId,
     title: req.body.title,
     content: req.body.content,
-    tags: req.body.tags
+    tags: req.body.tags,
+    entryDate: req.body.entryDate
   });
   res.json(entry);
 });
@@ -56,6 +57,7 @@ router.put('/:id', async (req, res) => {
   entry.title = req.body.title;
   entry.content = req.body.content;
   entry.tags = req.body.tags;
+  entry.entryDate = req.body.entryDate;
   await entry.save();
   res.json(entry);
 });

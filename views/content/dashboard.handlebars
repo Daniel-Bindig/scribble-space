@@ -1,5 +1,6 @@
 <main>
-    <div class="upper-container">
+    <!-- 
+    <div class="upper-container" id='container1'>
         <nav class="navbar">
             <ul class="menu">
                 <li><a href="#" id="home-tab">Home</a></li>
@@ -8,11 +9,56 @@
                 <li><a href="#" id="notifications-tab">Notifications</a></li>
             </ul>
         </nav>
+        <div id="selected-option">H O M E</div>
     </div>
+    -->
     <div class="lower-container">
+
         <div id="content-area">
 
+            <!-- Event Form -->
+            <!--
+            <div id="event-form-container">
+                <form id="eventForm">
+                    <label for="eventName">Event Name:</label>
+                    <input type="text" id="eventName" name="eventName">
+                    <label for="eventDate">Event Date:</label>
+                    <input type="date" id="eventDate" name="eventDate">
+                    <input type="submit" value="Add Event">
+                </form>
+            </div>
+            -->
+            <!-- Calendar -->
+            <div id="calendar-container">
+                <div id="calendar"></div>
+            </div>
+        </div>
+        <div id="edit-area">
+            <!-- Template entry -->
+            <div><p>Today's Tasks</p></div>
+            <div id="entry-template" class="entry hidden">
+                <p>Test text</p>
+            </div>
+            <div class="entry">
+                <div class="entry-title">Test Entry</div>
+                <div class="entry-content">
+                    <p>This is a test entry</p>
+                    <p>This contains rich text</p>
+                </div>
+                <div class="entry-buttons">
+                    <div class="edit-button">
+                        <img src="/img/pencil.svg"/>
+                    </div>
+                    <div class="reminder-button">
+                        <img src="/img/bell.svg"/>
+                    </div>
+                    <div class="delete-button">
+                        <img src="/img/bin2.svg"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <script src="./dashboard.js"></script>
 </main>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="./dashboard.js"></script>
