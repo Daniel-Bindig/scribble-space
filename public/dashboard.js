@@ -10,10 +10,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     //   }
     // },
     dateClick: function(info) {
-      const targetDate = '2023-09-30'; // Replace with your date
-      if (info.dateStr === targetDate) {
-        alert('Date clicked: ' + info.dateStr);
-      }
+        console.log(info);
     }
   });
 calendar.render();
@@ -33,6 +30,18 @@ function clearCalendar(){
 //     // ends tomorrow
 //     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
 // });
+
+function renderEntry(entry){
+    const template = document.getElementById('entry-template');
+    const clone = template.content.cloneNode(true);
+    const title = clone.querySelector('.entry-title');
+    const content = clone.querySelector('.entry-content');
+    const tags = clone.querySelector('.entry-tags');
+    const date = clone.querySelector('.entry-date');
+    const editButton = clone.querySelector('.edit-button');
+    const deleteButton = clone.querySelector('.delete-button');
+    
+}
 
 function loadEntryPreviews(){
     fetch('/entry/preview')

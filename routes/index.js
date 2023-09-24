@@ -17,6 +17,11 @@ const isAuthenticated = (req, res, next) => {
 const share = require('./share');
 unauthenticatedRouter.use('/share', share);
 
+// Other static routes
+unauthenticatedRouter.get('/attributions', (req, res) => {
+  res.render('content/attributions');
+});
+
 // Register Authenticated Routes
 authenticatedRouter.use(isAuthenticated); // Apply authentication middleware
 const entry = require('./entry');
