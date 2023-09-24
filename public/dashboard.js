@@ -73,6 +73,9 @@ async function renderEntry(entry){
         });
     });
 
+    editButton.addEventListener('click', () => {
+        showEditModal(fullEntry);
+    });
     return clone;
 }
 
@@ -105,6 +108,23 @@ async function deleteEntry(id){
     return response;
 }
 
+async function updateEntry(id, title, content, tags){
+    fetch(`/entry/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            title,
+            content,
+            tags
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        refreshCalendar();
+    });
+}
 
 async function createEntry(title, content, tags, entryDate){
     fetch('/entry', {
@@ -137,8 +157,56 @@ function refreshCalendar(){
     loadEntryPreviews();
 }
 
-function showEditModal(date){
+// Basically the same as showCreateModal but prepopulate the form with data from the entry and send to different endpoint
+function showEditModal(entry){
+    const form = document.querySelector('#edit-form');
     const modal = document.getElementById('edit-modal');
+
+    form.reset();
+
+    // Populate form data
+    form.querySelector('#edit-title').value = entry.title;
+    form.querySelector('#edit-content').value = entry.content;
+    form.querySelector('#edit-tags').value = entry.tags;
+  
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const title = formData.get('title');
+      const content = formData.get('content');
+      const tags = formData.get('tags');
+
+      updateEntry(entry.id, title, content, tags);
+  
+      modal.close();
+
+      form.removeEventListener('submit', handleSubmit);
+    }
+
+    form.addEventListener('submit', handleSubmit);
+  
+    function handleClose() {
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    modal.addEventListener('close', handleClose, { once: true });
+    
+    const cancelButton = modal.querySelector('#edit-cancel');
+    cancelButton.addEventListener('click', () => {
+        modal.close();
+        handleClose();
+    });
+
+    console.log(entry);
+  
+    const readableDate = new Date(entry.entryDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  
+    modal.querySelector('#edit-date').textContent = readableDate;
     modal.showModal();
 }
 
@@ -146,10 +214,8 @@ function showCreateModal(date) {
     const form = document.querySelector('#edit-form');
     const modal = document.getElementById('edit-modal');
 
-    // Clear form
     form.reset();
   
-    // Define named function for event handling
     function handleSubmit(event) {
       event.preventDefault();
   
@@ -160,25 +226,19 @@ function showCreateModal(date) {
       const entryDate = date;
       createEntry(title, content, tags, entryDate);
   
-      // Close modal
       modal.close();
   
-      // Remove event listener
       form.removeEventListener('submit', handleSubmit);
     }
   
-    // Add submit event listener
     form.addEventListener('submit', handleSubmit);
   
-    // Define named function for close event handling
     function handleClose() {
       form.removeEventListener('submit', handleSubmit);
     }
   
-    // Add close event listener
     modal.addEventListener('close', handleClose, { once: true });
     
-    // Add cancel button event listener
     const cancelButton = modal.querySelector('#edit-cancel');
     cancelButton.addEventListener('click', () => {
         modal.close();
