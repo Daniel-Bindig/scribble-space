@@ -230,15 +230,15 @@ nav .navbar {
 }
 
 #calendar-container {
-margin: 30px 5%;
-text-align-last: justify;
-height: 70vh;
-width: 90%;
-padding: 20px;
-background-color: var(--secondary);
-border-radius: 10px;
-font-family: 'handlee';
-overflow: hidden;
+  margin: 30px 5%;
+  text-align-last: justify;
+  height: 70vh;
+  width: 90%;
+  padding: 20px;
+  background-color: var(--secondary);
+  border-radius: 10px;
+  font-family: 'handlee';
+  overflow: hidden;
 }
 
 div#event-form-container {
