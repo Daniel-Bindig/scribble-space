@@ -73,7 +73,8 @@ app.use(express.json());
 // Check if user is authenticated, if they are send them to content/dashboard
 // Otherwise, send them to content/landing
 app.get('/', (req, res) => {
-  if (req.session && req.session.username) {
+  console.log(req.session)
+  if (req.session && req.session.passport && req.session.passport.user) { // This could probably be cleaner
     res.render('content/dashboard');
   } else {
     res.render('content/landing');
