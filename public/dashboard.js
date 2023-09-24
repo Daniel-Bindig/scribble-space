@@ -28,7 +28,7 @@ calendar.render();
 //     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
 // });
 
-function getEventsPreview(){
+function getEntryPreview(){
     fetch('/entry/preview')
     .then(response => response.json())
     .then(data => {
@@ -45,11 +45,11 @@ function getEventsPreview(){
     });
 }
 
-function getEventsForDay(date){
+function getEntryForDate(date){
 
 }
 
-function createEvent(title, content, tags, entryDate){
+function createEntry(title, content, tags, entryDate){
     fetch('/entry', {
         method: 'POST',
         headers: {
