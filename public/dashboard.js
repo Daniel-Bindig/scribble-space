@@ -11,6 +11,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     // },
     dateClick: function(info) {
         console.log(info);
+        showCreateModal(info.date);
     }
   });
 calendar.render();
@@ -40,7 +41,7 @@ function renderEntry(entry){
     const date = clone.querySelector('.entry-date');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
-    
+
 }
 
 function loadEntryPreviews(){
@@ -68,7 +69,7 @@ function getEntryById(id){
     });
 }
 
-function createEntry(title, content, tags, entryDate){
+async function createEntry(title, content, tags, entryDate){
     fetch('/entry', {
         method: 'POST',
         headers: {
@@ -101,6 +102,55 @@ function refreshCalendar(){
 
 
 refreshCalendar();
+
+function showEditModal(date){
+    const modal = document.getElementById('edit-modal');
+    modal.showModal();
+}
+
+function showCreateModal(date) {
+    const form = document.querySelector('#edit-form');
+    const modal = document.getElementById('edit-modal');
+  
+    // Define named function for event handling
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const title = formData.get('title');
+      const content = formData.get('content');
+      const tags = formData.get('tags');
+      const entryDate = date;
+      createEntry(title, content, tags, entryDate);
+  
+      // Close modal
+      modal.close();
+  
+      // Remove event listener
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    // Add submit event listener
+    form.addEventListener('submit', handleSubmit);
+  
+    // Define named function for close event handling
+    function handleClose() {
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    // Add close event listener
+    modal.addEventListener('close', handleClose, { once: true });
+  
+    const readableDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  
+    modal.querySelector('#edit-date').textContent = readableDate;
+    modal.showModal();
+  }
+  
 
 
 // const menuItems = document.querySelectorAll('.menu li a');

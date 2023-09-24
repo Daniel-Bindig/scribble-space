@@ -59,6 +59,20 @@
             </div>
         </div>
     </div>
+    <dialog id="edit-modal">
+        <div id="edit-modal-title">Entry for <span id="edit-date">DATE</span></div>
+        <form id="edit-form">
+            <label for="edit-title">Title:</label>
+            <input type="text" id="edit-title" name="title">
+            <label for="edit-content">Content:</label>
+            <textarea id="edit-content" name="content"></textarea>
+            <label for="edit-tags">Tags:</label>
+            <input type="text" id="edit-tags" name="tags">
+            <label for="edit-reminder">Reminder:</label>
+            <input type="checkbox" id="edit-reminder" name="reminder">
+            <input type="submit" value="Save">
+        </form>
+    </dialog>
 </main>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script src="./dashboard.js"></script>
