@@ -1,18 +1,35 @@
 const calendarEl = document.getElementById('calendar');
 const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
-    // dayCellContent: function(info) {
-    //   const targetDate = '2023-09-30'; // Replace with your date
-    //   if (info.dateStr === targetDate) {
-    //     const iconElement = document.createElement('i');
-    //     iconElement.className = 'fas fa-star'; // Font Awesome icon class
-    //     info.cellContainer.appendChild(iconElement);
-    //   }
-    // },
     dateClick: function(info) {
+        // Select current date
+        calendar.select(info.date);
+        //console.log(info);
+        //showCreateModal(info.date);
+    },
+    // date selected
+    select: function(info) {
+        // Get all events for selected date
+        const events = calendar.getEvents();
+        const selectedDate = info.start;
+        const selectedEntries = events.filter(event => {
+            return event.start.toDateString() === selectedDate.toDateString();
+        }
+        );
+        // Clear left panel
+        const entriesPanel = document.querySelector('#entries');
+        entriesPanel.innerHTML = '';
+
+        // Populate left panel with events
+        selectedEntries.forEach(async(entry) => {
+            const clone = await renderEntry(entry);
+            entriesPanel.appendChild(clone);
+        });
+    },
+    // date unselected
+    unselect: function(info) {
         console.log(info);
-        showCreateModal(info.date);
-    }
+    },
   });
 calendar.render();
 
@@ -22,33 +39,53 @@ function clearCalendar(){
     });
 }
 
-// Add event to calendar for today for testing
-// calendar.addEvent({
-//     title: 'TEST',
-//     start: new Date(),
-//     // Do not display time
-//     allDay: true,
-//     // ends tomorrow
-//     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-// });
 
-function renderEntry(entry){
-    const template = document.getElementById('entry-template');
-    const clone = template.content.cloneNode(true);
+async function renderEntry(entry){
+    // Get template element
+    const template = document.querySelector('#entry-template');
+    // Clone template
+    const clone = template.cloneNode(true);
+    // Remove hidden class
+    clone.classList.remove('hidden');
+    // Populate clone with event data
     const title = clone.querySelector('.entry-title');
     const content = clone.querySelector('.entry-content');
-    const tags = clone.querySelector('.entry-tags');
-    const date = clone.querySelector('.entry-date');
+    //const tags = clone.querySelector('.entry-tags');
+    //const date = clone.querySelector('.entry-date');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
 
+    // Fetch event data
+    const fullEntry = await getEntryById(entry.id);
+    console.log(fullEntry);
+
+    title.textContent = fullEntry.title;
+    content.textContent = fullEntry.content;
+    //tags.textContent = fullEntry.tags;
+    // date.textContent = entry.start.toLocaleDateString('en-US', {
+    //     year: 'numeric',
+    //     month: 'long',
+    //     day: 'numeric'
+    // });
+    // Add event listeners
+    // editButton.addEventListener('click', () => {
+    //     showEditModal(entry.start);
+    // });
+    deleteButton.addEventListener('click', () => {
+        clone.remove();
+        deleteEntry(entry.id).then(response => {
+            refreshCalendar();
+        });
+    });
+    // Append clone to left panel
+    return clone;
+    //entriesPanel.appendChild(clone);
 }
 
 function loadEntryPreviews(){
     fetch('/entry/preview')
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         data.forEach(entry => {
             calendar.addEvent({
                 title: entry.title,
@@ -61,13 +98,31 @@ function loadEntryPreviews(){
     });
 }
 
-function getEntryById(id){
-    fetch(`/entry/${id}`)
-    .then(response => response.json())
-    .then(data => {
-        return data;
-    });
+async function getEntryById(id) {
+    const response = await fetch(`/entry/${id}`);
+    const data = await response.json();
+    return data;
 }
+
+// Delete entry
+// router.delete('/:id', async (req, res) => {
+//     const entry = await Entry.findOne({
+//       where: {
+//         id: req.params.id,
+//         userId: req.user.id
+//       }
+//     });
+//     await entry.destroy();
+//     res.json({ message: "Deleted entry" });
+//   });
+
+async function deleteEntry(id){
+    const response = fetch(`/entry/${id}`, {
+        method: 'DELETE'
+    });
+    return response;
+}
+
 
 async function createEntry(title, content, tags, entryDate){
     fetch('/entry', {
