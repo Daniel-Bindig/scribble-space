@@ -111,6 +111,9 @@ function showEditModal(date){
 function showCreateModal(date) {
     const form = document.querySelector('#edit-form');
     const modal = document.getElementById('edit-modal');
+
+    // Clear form
+    form.reset();
   
     // Define named function for event handling
     function handleSubmit(event) {
@@ -140,6 +143,13 @@ function showCreateModal(date) {
   
     // Add close event listener
     modal.addEventListener('close', handleClose, { once: true });
+    
+    // Add cancel button event listener
+    const cancelButton = modal.querySelector('#edit-cancel');
+    cancelButton.addEventListener('click', () => {
+        modal.close();
+        handleClose();
+    });
   
     const readableDate = date.toLocaleDateString('en-US', {
       year: 'numeric',
