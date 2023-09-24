@@ -18,6 +18,12 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   });
 calendar.render();
 
+function clearCalendar(){
+    calendar.getEvents().forEach(event => {
+        event.remove();
+    });
+}
+
 // Add event to calendar for today for testing
 // calendar.addEvent({
 //     title: 'TEST',
@@ -28,7 +34,7 @@ calendar.render();
 //     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
 // });
 
-function getEntryPreview(){
+function loadEntryPreviews(){
     fetch('/entry/preview')
     .then(response => response.json())
     .then(data => {
@@ -45,8 +51,12 @@ function getEntryPreview(){
     });
 }
 
-function getEntryForDate(date){
-
+function getEntryById(id){
+    fetch(`/entry/${id}`)
+    .then(response => response.json())
+    .then(data => {
+        return data;
+    });
 }
 
 function createEntry(title, content, tags, entryDate){
@@ -74,6 +84,15 @@ function createEntry(title, content, tags, entryDate){
         });
     });
 }
+
+function refreshCalendar(){
+    clearCalendar();
+    loadEntryPreviews();
+}
+
+
+refreshCalendar();
+
 
 // const menuItems = document.querySelectorAll('.menu li a');
 // const contentArea = document.getElementById('content-area');
