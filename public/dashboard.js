@@ -11,23 +11,11 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     },
     // date selected
     select: function(info) {
+        // Make create entry buttons visible
         editButtons.classList.remove('invisible');
-        // Get all events for selected date
-        const events = calendar.getEvents();
-        const currentDate = info.start;
-        selectedDate = currentDate;
-        const selectedEntries = events.filter(event => {
-            return event.start.toDateString() === currentDate.toDateString();
-        }
-        );
-
-        // Populate left panel with events
-        const entriesPanel = document.querySelector('#entries');
-        entriesPanel.innerHTML = '';
-        selectedEntries.forEach(async(entry) => {
-            const clone = await renderEntry(entry);
-            entriesPanel.appendChild(clone);
-        });
+        // Update global current date variable
+        selectedDate = info.start;
+        populateEntriesPanel();
     },
     // date unselected
     unselect: function(info) {
@@ -45,6 +33,25 @@ const createButton = document.querySelector('#create-entry-button');
 createButton.addEventListener('click', () => {
     showCreateModal(selectedDate);
 });
+
+
+function populateEntriesPanel(){
+    // Get all events for selected date
+    const events = calendar.getEvents();
+    
+    const selectedEntries = events.filter(event => {
+        return event.start.toDateString() === selectedDate.toDateString();
+    });
+    // Populate left panel with events
+    const entriesPanel = document.querySelector('#entries');
+    entriesPanel.innerHTML = '';
+    selectedEntries.forEach(async(entry) => {
+        const clone = await renderEntry(entry);
+        entriesPanel.appendChild(clone);
+    });
+}
+
+
 
 async function renderEntry(entry){
     // Clone template
@@ -178,6 +185,7 @@ function showEditModal(entry){
       const tags = formData.get('tags');
 
       updateEntry(entry.id, title, content, tags);
+      populateEntriesPanel();
   
       modal.close();
 
