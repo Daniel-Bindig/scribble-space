@@ -51,8 +51,6 @@ function populateEntriesPanel(){
     });
 }
 
-
-
 async function renderEntry(entry){
     // Clone template
     const template = document.querySelector('#entry-template');
@@ -65,6 +63,7 @@ async function renderEntry(entry){
     const content = clone.querySelector('.entry-content');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
+    const reminderButton = clone.querySelector('.reminder-button');
 
     // Fetch event data
     const fullEntry = await getEntryById(entry.id);
@@ -83,6 +82,11 @@ async function renderEntry(entry){
     editButton.addEventListener('click', () => {
         showEditModal(fullEntry);
     });
+
+    reminderButton.addEventListener('click', () => {
+        createReminder(entry.id, entry.start);
+    });
+
     return clone;
 }
 
@@ -156,6 +160,23 @@ async function createEntry(title, content, tags, entryDate){
             id: data.id,
             tags: data.tags
         });
+    });
+}
+
+function createReminder(entryId, reminderTime){
+    fetch('/reminder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entryId,
+            reminderTime
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data;
     });
 }
 
