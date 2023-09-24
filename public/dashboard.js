@@ -1,9 +1,79 @@
 const calendarEl = document.getElementById('calendar');
 const calendar = new FullCalendar.Calendar(calendarEl, {
-  initialView: 'dayGridMonth'
-});
+    initialView: 'dayGridMonth',
+    // dayCellContent: function(info) {
+    //   const targetDate = '2023-09-30'; // Replace with your date
+    //   if (info.dateStr === targetDate) {
+    //     const iconElement = document.createElement('i');
+    //     iconElement.className = 'fas fa-star'; // Font Awesome icon class
+    //     info.cellContainer.appendChild(iconElement);
+    //   }
+    // },
+    dateClick: function(info) {
+      const targetDate = '2023-09-30'; // Replace with your date
+      if (info.dateStr === targetDate) {
+        alert('Date clicked: ' + info.dateStr);
+      }
+    }
+  });
 calendar.render();
 
+// Add event to calendar for today for testing
+// calendar.addEvent({
+//     title: 'TEST',
+//     start: new Date(),
+//     // Do not display time
+//     allDay: true,
+//     // ends tomorrow
+//     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+// });
+
+function getEventsPreview(){
+    fetch('/entry/preview')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        data.forEach(entry => {
+            calendar.addEvent({
+                title: entry.title,
+                start: entry.entryDate,
+                allDay: true,
+                id: entry.id,
+                tags: entry.tags
+            });
+        });
+    });
+}
+
+function getEventsForDay(date){
+
+}
+
+function createEvent(title, content, tags, entryDate){
+    fetch('/entry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            title,
+            content,
+            tags,
+            entryDate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        calendar.addEvent({
+            title: data.title,
+            start: data.entryDate,
+            allDay: true,
+            id: data.id,
+            tags: data.tags
+        });
+    });
+}
 
 // const menuItems = document.querySelectorAll('.menu li a');
 // const contentArea = document.getElementById('content-area');

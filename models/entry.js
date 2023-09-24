@@ -29,6 +29,9 @@ Entry.init({
   tags: {
     type: DataTypes.TEXT
   },
+  entryDate: {
+    type: DataTypes.DATEONLY
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
