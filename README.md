@@ -5,7 +5,7 @@ Scribble Space is a user-friendly task management and planning application desig
 
 ![Preview image](preview.png)
 
-[Link to live deployment](https://scribble-space-ffea9e871ebd.herokuapp.com/)
+[Link to live deployment](https://gentle-journey-56421-d5fa88de413f.herokuapp.com/)
 
 
 ## Features
