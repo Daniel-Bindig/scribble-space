@@ -39,6 +39,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 
+const MySQLStore = require('express-mysql-session')(session);
 let dbOptions;
 
 if (process.env.JAWSDB_URL) {
