@@ -6,8 +6,6 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     dateClick: function(info) {
         // Select current date
         calendar.select(info.date);
-        //console.log(info);
-        //showCreateModal(info.date);
     },
     // date selected
     select: function(info) {
@@ -51,8 +49,6 @@ function populateEntriesPanel(){
     });
 }
 
-
-
 async function renderEntry(entry){
     // Clone template
     const template = document.querySelector('#entry-template');
@@ -65,15 +61,26 @@ async function renderEntry(entry){
     const content = clone.querySelector('.entry-content');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
+    const reminderButton = clone.querySelector('.reminder-button');
+
+    // Fetch notification status
+    getReminderByEntryId(entry.id).then(reminder => {
+        if(reminder.length > 0){
+            clone.querySelector('.reminder-button > img').src = '/img/bell-on.svg';
+            reminderButton.dataset.reminderid = reminder[0].id;
+        }
+    });
 
     // Fetch event data
     const fullEntry = await getEntryById(entry.id);
-    console.log(fullEntry);
 
     title.textContent = fullEntry.title;
     content.textContent = fullEntry.content;
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if(reminderButton.dataset.reminderid !== '0'){
+            await deleteReminder(reminderButton.dataset.reminderid);
+        }
         clone.remove();
         deleteEntry(entry.id).then(response => {
             refreshCalendar();
@@ -83,6 +90,21 @@ async function renderEntry(entry){
     editButton.addEventListener('click', () => {
         showEditModal(fullEntry);
     });
+
+    // Toggle reminder state
+    reminderButton.addEventListener('click', async () => {
+        if(reminderButton.dataset.reminderid !== '0'){
+            deleteReminder(reminderButton.dataset.reminderid);
+            reminderButton.querySelector('img').src = '/img/bell.svg';
+            reminderButton.dataset.reminderid = "0";
+        } else {
+            const reminderId = await createReminder(entry.id, entry.start);
+            reminderButton.dataset.reminderid = reminderId;
+            reminderButton.querySelector('img').src = '/img/bell-on.svg';
+            
+        }
+    });
+
     return clone;
 }
 
@@ -148,7 +170,6 @@ async function createEntry(title, content, tags, entryDate){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         calendar.addEvent({
             title: data.title,
             start: data.entryDate,
@@ -157,6 +178,34 @@ async function createEntry(title, content, tags, entryDate){
             tags: data.tags
         });
     });
+}
+
+async function createReminder(entryId, reminderTime){
+    const response = await fetch('/reminder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entryId,
+            reminderTime
+        })
+    });
+    const data = await response.json();
+    return data.id;
+}
+
+async function getReminderByEntryId(id){
+    const response = await fetch(`/reminder/entry/${id}`);
+    const data = await response.json();
+    return data;
+}
+
+async function deleteReminder(id){
+    const response = fetch(`/reminder/${id}`, {
+        method: 'DELETE'
+    });
+    return response;
 }
 
 function refreshCalendar(){
@@ -206,7 +255,6 @@ function showEditModal(entry){
         handleClose();
     });
 
-    console.log(entry);
   
     const readableDate = new Date(entry.entryDate).toLocaleDateString('en-US', {
       year: 'numeric',
