@@ -16,22 +16,32 @@ router.get('/signup', (req, res) => {
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
-  console.log(`Received: username=${username}, email=${email}, password=${password}`);  // Debug log
+  let failmessage = '';
+
+  
+  // Check email is valid
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    failmessage = "Invalid email address.";
+  }
 
   //add username length check here
   if (username.length < 4 || username.length > 32) {
-    return res.status(400).json({ message: 'Username must be between 4 and 32 characters.' });
+    failmessage = "Username must be between 4 and 32 characters.";
   }
 
   //check if user already exists return error if they do
   const user = await User.findOne({ where: { email: email } });
-  if (user) {
-    return res.status(400).json({ message: 'User already exists' });
+  if (user) {    failmessage = "User already exists";
   }
   
   // Add Password Length Check here
   if (password.length < 8 || password.length > 32) {
-    return res.status(400).json({ message: 'Password must be between 8 and 32 characters.' });
+    failmessage = "Password must be between 8 and 32 characters.";
+  }
+
+  if(failmessage !== '') {
+    return res.render('content/signup', { message: failmessage });
   }
 
   // Hash the password using bcrypt
