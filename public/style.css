@@ -503,3 +503,29 @@ dialog {
     font-family: 'handlee';
     font-size: 20px;
 }
+
+.shared-entry-card {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    width: 90%;
+    font-family: 'handlee';
+    font-size: 20px;
+    max-width: 512px;
+    min-height: 200px;
+}
+
+.shared-entry-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.shared-entry-content {
+    max-height: 100px;
+    overflow: hidden;
+    text-align: left;
+    text-indent: 15px;
+}

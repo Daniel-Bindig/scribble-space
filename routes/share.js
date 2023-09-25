@@ -70,7 +70,7 @@ router.get('/:accessKey', async (req, res) => {
   if (!share) {
     return res.status(404).json({ message: "Share not found" });
   }
-  res.json(share);
+  res.render('content/share', { title: share.Entry.title, content: share.Entry.content});
 });
 
 module.exports = router;
