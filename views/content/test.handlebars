@@ -1,37 +1,35 @@
-<main>
-    <div class="form-card">
-        <h2 id="api-test-heading">TEST REQUEST</h2>
-        <form id="api-test-form">
-            <div class="form-group">
-                <label for="request-type">Request Type:</label>
-                <br>
-                <select id="request-type" class="form-input">
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="DELETE">DELETE</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="endpoint">Endpoint:</label>
-                <br>
-                <input type="text" id="endpoint" class="form-input"/>
-            </div>
-            <div class="form-group">
-                <label for="custom-data">Custom Data (JSON format):</label>
-                <br>
-                <textarea id="custom-data" class="form-input"></textarea>
-            </div>
-            <div>
-                <button type="button" id="test-button" class="btn">TEST</button>
-            </div>
-        </form>
-        <div id="response-container">
-            <h3 id="response-heading">Response:</h3>
-            <div id="response-body">
+<div class="form-card">
+    <h2 id="api-test-heading">TEST REQUEST</h2>
+    <form id="api-test-form">
+        <div class="form-group">
+            <label for="request-type">Request Type:</label>
+            <br>
+            <select id="request-type" class="form-input">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
         </div>
+        <div class="form-group">
+            <label for="endpoint">Endpoint:</label>
+            <br>
+            <input type="text" id="endpoint" class="form-input"/>
+        </div>
+        <div class="form-group">
+            <label for="custom-data">Custom Data (JSON format):</label>
+            <br>
+            <textarea id="custom-data" class="form-input"></textarea>
+        </div>
+        <div>
+            <button type="button" id="test-button" class="btn">TEST</button>
+        </div>
+    </form>
+    <div id="response-container">
+        <h3 id="response-heading">Response:</h3>
+        <div id="response-body">
     </div>
-</main>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('api-test-form');

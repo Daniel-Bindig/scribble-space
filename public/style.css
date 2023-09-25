@@ -441,3 +441,22 @@ dialog {
     margin-bottom: 10px;
     text-align: left;
 }
+
+#footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 7px;
+}
+
+#footer > a {
+    text-decoration: none;
+    color: var(--primary);
+    font-family: 'handlee';
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#footer > a:hover {
+    text-decoration: underline;
+}
