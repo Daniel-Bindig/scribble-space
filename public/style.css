@@ -106,7 +106,11 @@ main {
     height: 65px;
     border: solid 3px;
     border-radius: 5px;
-    background-color: var(--light);
+    background-color: var(--primary);
+    font-family: 'handlee';
+    font-size: 25px;
+    color: var(--secondary);
+    border-radius: 20px;
 }
 
 .btn:active {
@@ -617,4 +621,23 @@ dialog {
         overflow: hidden;
         height: 100%;
     }
+}
+
+.error-message {
+    color: var(--error);
+    font-family: 'handlee';
+    font-size: 20px;
+    padding: 0;
+}
+
+.info-message {
+    color: var(--primary);
+    font-family: 'handlee';
+    font-size: 20px;
+    padding: 0;
+}
+
+.info-message > a {
+    color: var(--primary);
+    text-decoration: underline;
 }
