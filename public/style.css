@@ -1,8 +1,8 @@
 :root {
-    --primary: #4d433c;
+    --primary: #634b3d;
     --secondary: #f3e5b8;
-    --tertiary: #634b3d;
-    --quatrinary: #f8f5e9;
+    --tertiary: hsl(22 20% 40% / 1);
+    --quatrinary: #f3e5b8;
     --light: #e3e4e3;
     --dark: #182c23;
     --error: rgb(228, 46, 1);
@@ -182,7 +182,7 @@ nav .navbar {
     padding-bottom: 20px;
     padding-top: 20px;
     overflow-x: hidden;
-    background-color: #e8efef;
+    background-color: var(--primary);
 }
 
 #selected-option {
@@ -196,9 +196,9 @@ nav .navbar {
     color: #444fca;
 }
 
-#edit-area,
-#content-area {
-    background-color: #EAEBEC;
+#edit-area {
+    background-color: var(--tertiary);
+    border-radius: 20px;
 }
 
 #edit-area {
@@ -206,7 +206,6 @@ nav .navbar {
     margin-right: 56px;
     float: left;
     margin-left: 15px;
-    border: 1px solid green;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -222,7 +221,6 @@ nav .navbar {
     width: 65.5%;
     float: right;
     height: auto;
-    border: 1px solid blue;
     margin: 0;
     margin-right: 15px;
     overflow-y: hidden;
@@ -232,7 +230,6 @@ nav .navbar {
 #calendar-container {
   margin: 30px 5%;
   text-align-last: justify;
-  height: 70vh;
   width: 90%;
   padding: 20px;
   background-color: var(--secondary);
@@ -338,6 +335,7 @@ div#event-form-container {
     background-color: var(--quatrinary);
     font-family: 'handlee';
     font-size: 20px;
+    border: none;
 }
 
 #edit-form {
