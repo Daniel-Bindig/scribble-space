@@ -39,16 +39,31 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 
-const MySQLStore = require('express-mysql-session')(session);
+let dbOptions;
 
-// Initialize session store
-const sessionStore = new MySQLStore({
-  host: "localhost",
-  port: "3306",
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
+if (process.env.JAWSDB_URL) {
+  const dbUrl = new URL(process.env.JAWSDB_URL);
+  dbOptions = {
+    host: dbUrl.hostname,
+    port: dbUrl.port,
+    user: dbUrl.username,
+    password: dbUrl.password,
+    database: dbUrl.pathname.substr(1)
+  };
+} else {
+  dbOptions = {
+    host: "localhost",
+    port: "3306",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+  };
+}
+
+const sessionStore = new MySQLStore(dbOptions);
+
+
+
 
 app.use(session({
   key: 'my_app_session',
