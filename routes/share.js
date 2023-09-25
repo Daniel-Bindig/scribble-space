@@ -47,4 +47,30 @@ router.post('/', async (req, res) => {
   res.json(share);
 });
 
+
+// Get a shared entry
+router.get('/:accessKey', async (req, res) => {
+  const share = await Share.findOne({
+    where: {
+      accessKey: req.params.accessKey
+    },
+    include: [
+      {
+        model: Entry,
+        attributes: ['id', 'title', 'content', 'tags', 'entryDate', 'createdAt', 'updatedAt'],
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'username']
+          }
+        ]
+      }
+    ]
+  });
+  if (!share) {
+    return res.status(404).json({ message: "Share not found" });
+  }
+  res.render('content/share', { title: share.Entry.title, content: share.Entry.content});
+});
+
 module.exports = router;

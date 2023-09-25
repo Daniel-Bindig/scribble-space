@@ -1,19 +1,25 @@
 const calendarEl = document.getElementById('calendar');
+const editButtons = document.querySelector('.edit-buttons');
+var selectedDate = new Date();
 const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
-    // dayCellContent: function(info) {
-    //   const targetDate = '2023-09-30'; // Replace with your date
-    //   if (info.dateStr === targetDate) {
-    //     const iconElement = document.createElement('i');
-    //     iconElement.className = 'fas fa-star'; // Font Awesome icon class
-    //     info.cellContainer.appendChild(iconElement);
-    //   }
-    // },
     dateClick: function(info) {
-        console.log(info);
-    }
+        // Select current date
+        calendar.select(info.date);
+    },
+    // date selected
+    select: function(info) {
+        // Make create entry buttons visible
+        editButtons.classList.remove('invisible');
+        // Update global current date variable
+        selectedDate = info.start;
+        populateEntriesPanel();
+    },
+    // date unselected
+    unselect: function(info) {
+        editButtons.classList.add('invisible');
+    },
   });
-calendar.render();
 
 function clearCalendar(){
     calendar.getEvents().forEach(event => {
@@ -21,33 +27,100 @@ function clearCalendar(){
     });
 }
 
-// Add event to calendar for today for testing
-// calendar.addEvent({
-//     title: 'TEST',
-//     start: new Date(),
-//     // Do not display time
-//     allDay: true,
-//     // ends tomorrow
-//     //end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-// });
+const createButton = document.querySelector('#create-entry-button');
+createButton.addEventListener('click', () => {
+    showCreateModal(selectedDate);
+});
 
-function renderEntry(entry){
-    const template = document.getElementById('entry-template');
-    const clone = template.content.cloneNode(true);
+
+function populateEntriesPanel(){
+    // Get all events for selected date
+    const events = calendar.getEvents();
+    
+    const selectedEntries = events.filter(event => {
+        return event.start.toDateString() === selectedDate.toDateString();
+    });
+    // Populate left panel with events
+    const entriesPanel = document.querySelector('#entries');
+    entriesPanel.innerHTML = '';
+    selectedEntries.forEach(async(entry) => {
+        const clone = await renderEntry(entry);
+        entriesPanel.appendChild(clone);
+    });
+}
+
+async function renderEntry(entry){
+    // Clone template
+    const template = document.querySelector('#entry-template');
+    const clone = template.cloneNode(true);
+    clone.classList.remove('hidden');
+    clone.id = '';
+
+    // Populate clone with event data
     const title = clone.querySelector('.entry-title');
     const content = clone.querySelector('.entry-content');
-    const tags = clone.querySelector('.entry-tags');
-    const date = clone.querySelector('.entry-date');
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
-    
+    const reminderButton = clone.querySelector('.reminder-button');
+    const shareButton = clone.querySelector('.share-button');
+
+    // Fetch notification status
+    getReminderByEntryId(entry.id).then(reminder => {
+        if(reminder.length > 0){
+            clone.querySelector('.reminder-button > img').src = '/img/bell-on.svg';
+            reminderButton.dataset.reminderid = reminder[0].id;
+        }
+    });
+
+    // Fetch event data
+    const fullEntry = await getEntryById(entry.id);
+
+    title.textContent = fullEntry.title;
+    content.textContent = fullEntry.content;
+
+    deleteButton.addEventListener('click', async () => {
+        if(reminderButton.dataset.reminderid !== '0'){
+            await deleteReminder(reminderButton.dataset.reminderid);
+        }
+        clone.remove();
+        deleteEntry(entry.id).then(response => {
+            refreshCalendar();
+        });
+    });
+
+    editButton.addEventListener('click', () => {
+        showEditModal(fullEntry);
+    });
+
+    shareButton.addEventListener('click', async () => {
+        // Generate share link and copy to clipboard
+        console.log("SHaring " + entry.id)
+        const shareLink = await shareEntry(entry.id);
+        navigator.clipboard.writeText(shareLink);
+    });
+
+
+    // Toggle reminder state
+    reminderButton.addEventListener('click', async () => {
+        if(reminderButton.dataset.reminderid !== '0'){
+            deleteReminder(reminderButton.dataset.reminderid);
+            reminderButton.querySelector('img').src = '/img/bell.svg';
+            reminderButton.dataset.reminderid = "0";
+        } else {
+            const reminderId = await createReminder(entry.id, entry.start);
+            reminderButton.dataset.reminderid = reminderId;
+            reminderButton.querySelector('img').src = '/img/bell-on.svg';
+            
+        }
+    });
+
+    return clone;
 }
 
 function loadEntryPreviews(){
     fetch('/entry/preview')
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         data.forEach(entry => {
             calendar.addEvent({
                 title: entry.title,
@@ -60,15 +133,54 @@ function loadEntryPreviews(){
     });
 }
 
-function getEntryById(id){
-    fetch(`/entry/${id}`)
+async function getEntryById(id) {
+    const response = await fetch(`/entry/${id}`);
+    const data = await response.json();
+    return data;
+}
+
+async function deleteEntry(id){
+    const response = fetch(`/entry/${id}`, {
+        method: 'DELETE'
+    });
+    return response;
+}
+
+async function shareEntry(entryId){
+    const response = await fetch('/share', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entryId,
+            shareToUserId: 0
+        })
+    });
+    const data = await response.json();
+    return `${window.location.origin}/share/${data.accessKey}`;
+}
+
+
+async function updateEntry(id, title, content, tags){
+    fetch(`/entry/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            title,
+            content,
+            tags
+        })
+    })
     .then(response => response.json())
     .then(data => {
-        return data;
+        refreshCalendar();
     });
 }
 
-function createEntry(title, content, tags, entryDate){
+async function createEntry(title, content, tags, entryDate){
     fetch('/entry', {
         method: 'POST',
         headers: {
@@ -83,7 +195,6 @@ function createEntry(title, content, tags, entryDate){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         calendar.addEvent({
             title: data.title,
             start: data.entryDate,
@@ -94,61 +205,136 @@ function createEntry(title, content, tags, entryDate){
     });
 }
 
+async function createReminder(entryId, reminderTime){
+    const response = await fetch('/reminder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entryId,
+            reminderTime
+        })
+    });
+    const data = await response.json();
+    return data.id;
+}
+
+async function getReminderByEntryId(id){
+    const response = await fetch(`/reminder/entry/${id}`);
+    const data = await response.json();
+    return data;
+}
+
+async function deleteReminder(id){
+    const response = fetch(`/reminder/${id}`, {
+        method: 'DELETE'
+    });
+    return response;
+}
+
 function refreshCalendar(){
     clearCalendar();
     loadEntryPreviews();
 }
 
+// Basically the same as showCreateModal but prepopulate the form with data from the entry and send to different endpoint
+function showEditModal(entry){
+    const form = document.querySelector('#edit-form');
+    const modal = document.getElementById('edit-modal');
 
+    form.reset();
+
+    // Populate form data
+    form.querySelector('#edit-title').value = entry.title;
+    form.querySelector('#edit-content').value = entry.content;
+    //form.querySelector('#edit-tags').value = entry.tags;
+  
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const title = formData.get('title');
+      const content = formData.get('content');
+      //const tags = formData.get('tags');
+
+      updateEntry(entry.id, title, content, '');
+      populateEntriesPanel();
+  
+      modal.close();
+
+      form.removeEventListener('submit', handleSubmit);
+    }
+
+    form.addEventListener('submit', handleSubmit);
+  
+    function handleClose() {
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    modal.addEventListener('close', handleClose, { once: true });
+    
+    const cancelButton = modal.querySelector('#edit-cancel');
+    cancelButton.addEventListener('click', () => {
+        modal.close();
+        handleClose();
+    });
+
+  
+    const readableDate = new Date(entry.entryDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  
+    modal.querySelector('#edit-date').textContent = readableDate;
+    modal.showModal();
+}
+
+function showCreateModal(date) {
+    const form = document.querySelector('#edit-form');
+    const modal = document.getElementById('edit-modal');
+
+    form.reset();
+  
+    function handleSubmit(event) {
+      event.preventDefault();
+  
+      const formData = new FormData(form);
+      const title = formData.get('title');
+      const content = formData.get('content');
+      const tags = formData.get('tags');
+      const entryDate = date;
+      createEntry(title, content, tags, entryDate);
+  
+      modal.close();
+  
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    form.addEventListener('submit', handleSubmit);
+  
+    function handleClose() {
+      form.removeEventListener('submit', handleSubmit);
+    }
+  
+    modal.addEventListener('close', handleClose, { once: true });
+    
+    const cancelButton = modal.querySelector('#edit-cancel');
+    cancelButton.addEventListener('click', () => {
+        modal.close();
+        handleClose();
+    });
+  
+    const readableDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  
+    modal.querySelector('#edit-date').textContent = readableDate;
+    modal.showModal();
+}
+
+calendar.render();
 refreshCalendar();
-
-
-// const menuItems = document.querySelectorAll('.menu li a');
-// const contentArea = document.getElementById('content-area');
-// const selectedOption = document.getElementById('selected-option');
-// const calendarContainer = document.getElementById('calendar-container');
-
-// menuItems.forEach(item => {
-//     item.addEventListener('click', event => {
-//         event.preventDefault();
-
-//         const contentType = item.getAttribute('data-content');
-
-//         const optionText = item.textContent;
-//         selectedOption.textContent = optionText;
-
-//         //default hidden until 'calendar' is clicked
-//         calendarContainer.style.display = 'none';
-
-//         contentArea.innerHTML = '';
-
-//         switch (contentType) {
-//             case 'home-tab':
-//                 contentArea.innerHTML = 'homepage content';
-//                 break;
-//             case 'calendar-tab':
-//                 contentArea.innerHTML = 'calendar content';
-//                 break;
-//             case 'notes-tab':
-//                 contentArea.innerHTML = 'notes content';
-//                 break;
-//             case 'notifications-tab':
-//                 contentArea.innerHTML = 'notifications content';
-//                 break;
-//             default:
-//                 contentArea.innerHTML = 'Default Content';
-//         }
-//     });
-// });
-
-
-
-// TODO: Add "Create new event" button to left panel
-// When clicked, open modal with form to create new event
-
-// Sequence of events:
-// On page load: pull down preview events from server and populate the calendar days with them, including the event IDs
-// When a day is clicked: pull down the events for that day and populate the left side panel with them
-// Note that user can click on a day with no entries, and nothing should occur
-// When an entry in the left panel is clicked, open a modal for viewing/editing the event. Including a share button
-// Share function to be implemented by Alex

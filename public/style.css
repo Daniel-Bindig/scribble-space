@@ -1,8 +1,8 @@
 :root {
-    --primary: #4d433c;
+    --primary: #634b3d;
     --secondary: #f3e5b8;
-    --tertiary: #634b3d;
-    --quatrinary: #f8f5e9;
+    --tertiary: hsl(22 20% 40% / 1);
+    --quatrinary: #f3e5b8;
     --light: #e3e4e3;
     --dark: #182c23;
     --error: rgb(228, 46, 1);
@@ -40,6 +40,24 @@
     --fc-highlight-color: rgba(188, 232, 241, 0.3);
     --fc-today-bg-color: rgba(255, 220, 40, 0.15);
     --fc-now-indicator-color: red;
+
+    /* Scrollbar CSS */
+    /* Webkit */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        background: var(--secondary);
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+    }
+
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) var(--secondary);
+    }
 }
 
 * {
@@ -65,6 +83,8 @@ main {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    justify-content: space-between;
+    background-color: var(--primary);
 }
 
 .heading-text {
@@ -86,6 +106,7 @@ main {
 
 .btn {
     width: 200px;
+    height: 65px;
     border: solid 3px;
     border-radius: 5px;
     background-color: var(--light);
@@ -108,6 +129,8 @@ main {
     border-radius: 10px;
     padding-bottom: 10px;
     border: solid 2px var(--tertiary);
+    padding: 20px;
+    margin-top: 30px;
 }
 
 form .form-group {
@@ -175,18 +198,56 @@ nav .navbar {
     text-decoration: underline;
 }
 
+
 .lower-container {
     position: relative;
     display: flex;
     flex-direction: row-reverse;
     flex: 1;
     width: 100%;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    padding-top: 20px;
+    margin: 8px auto;
     overflow-x: hidden;
-    background-color: #e8efef;
+    background-color: var(--primary);
+    justify-content: flex-end;
 }
+
+#edit-area {
+    background-color: var(--tertiary);
+    border-radius: 20px;
+    width: 320px;
+    margin: 32px;
+    padding: 8px;
+    float: left;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content-area {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    height: auto;
+    margin: 8px auto;
+    margin-right: 15px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+#entries {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+
 
 #selected-option {
     text-transform: uppercase;
@@ -199,49 +260,20 @@ nav .navbar {
     color: #444fca;
 }
 
-#edit-area,
-#content-area {
-    background-color: #EAEBEC;
-}
-
-#edit-area {
-    width: 26.5%;
-    margin-right: 56px;
-    float: left;
-    margin-left: 15px;
-    border: 1px solid green;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
-}
-
-#content-area {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    width: 65.5%;
-    float: right;
-    height: auto;
-    border: 1px solid blue;
-    margin: 0;
-    margin-right: 15px;
-    overflow-y: hidden;
-    overflow-x: hidden;
+#calendar {
+    height: 100%;
+    width: 100%;
 }
 
 #calendar-container {
   margin: 30px 5%;
   text-align-last: justify;
-  height: 70vh;
   width: 90%;
+  height: 90%;
   padding: 20px;
   background-color: var(--secondary);
   border-radius: 10px;
   font-family: 'handlee';
-  overflow: hidden;
 }
 
 div#event-form-container {
@@ -251,14 +283,23 @@ div#event-form-container {
 .hidden {
     display: none;
 }
+
+.invisible {
+    visibility: hidden;
+}
+
+
+
 .entry {
-    margin: 10px 0;
+    margin: 10px;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--quatrinary);
     width: 90%;
     font-family: 'handlee';
     font-size: 20px;
+    max-width: 270px;
+    min-width: 220px;
 }
 
 .edit-button > img {
@@ -267,6 +308,14 @@ div#event-form-container {
     object-fit: cover;
     border-radius: 10px;
     rotate: 135deg;
+}
+
+.share-button > img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 10px;
+    scale: 0.65;
 }
 
 .delete-button > img {
@@ -303,6 +352,273 @@ div#event-form-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: 26px;
+}
+
+/* onhover effect */
+.entry-buttons > div {
+    cursor: pointer;
+}
+
+.entry-buttons > div:hover {
+    transform: scale(1.2);
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#create-entry-button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+    border: none;
+}
+
+#edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+}
+
+/* fully transparrent text input boxes */
+
+#edit-form > input, #edit-form > div > input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    margin-bottom: 10px;
+}
+
+#edit-form > div > input:hover {
+    transform: scale(1.35);
+}
+
+#edit-form > textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    font-size: 20px;
+    flex-grow: 1;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+#edit-form > div {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+}
+
+#edit-form > *, #edit-form > div > * {
+    font-family: 'handlee';
+}
+
+/* Match same look as entry styles */
+#edit-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#edit-content{
+    overflow: hidden;
+    text-align: left;
+    text-indent: 15px;
+}
+
+dialog {
+    width: 600px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    overflow: hidden;
+}
+
+/* Visually similar to entry styles */
+#modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+}
+
+#edit-modal-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 7px;
+    background-color: var(--secondary);
+}
+
+#footer > a {
+    text-decoration: none;
+    color: var(--primary);
+    font-family: 'handlee';
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#footer > a:hover {
+    text-decoration: underline;
+}
+
+#landing-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;;
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+}
+
+/* same as login form */
+#attributions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+}
+
+.shared-entry-card {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    width: 90%;
+    font-family: 'handlee';
+    font-size: 20px;
+    max-width: 512px;
+    min-height: 200px;
+}
+
+.shared-entry-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.shared-entry-content {
+    max-height: 100px;
+    overflow: hidden;
+    text-align: left;
+    text-indent: 15px;
+}
+
+
+/* mediaqueries */
+
+/* Login/Signup Page */
+@media (max-width: 600px) {
+    #btn-container {
+        flex-direction: column;
+    }
+    #landing-wrapper {
+        width: 100%;
+        border-radius: 0px;
+        margin-top: 0px;
+        padding: 0px;
+    }
+
+    .form-card {
+        width: 100%;
+        border-radius: 0px;
+        margin: 0px;
+        max-width: 100%;
+    }
+
+    .form-input {
+        width: 95%;
+        max-width: 350px;
+    }
+}
+
+/* Dashboard */
+@media (max-width: 1024px) {
+    .lower-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 0px auto;
+    }
+
+    #content-area {
+        width: 100%;
+        margin: 0;
+        min-height: 500px;
+    }
+
+    #edit-area {
+        width: 100%;
+        margin: 0;
+        flex-grow: 1;
+        border-radius: 0px;
+    }
+
+    #entries {
+        width: 100%;
+        margin: 0;
+        flex-grow: 1;
+        border-radius: 0px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        overflow: hidden;
+        height: 100%;
+    }
 }
 
 /* Footer Styles */
