@@ -40,6 +40,24 @@
     --fc-highlight-color: rgba(188, 232, 241, 0.3);
     --fc-today-bg-color: rgba(255, 220, 40, 0.15);
     --fc-now-indicator-color: red;
+
+    /* Scrollbar CSS */
+    /* Webkit */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        background: var(--secondary);
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+    }
+
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) var(--secondary);
+    }
 }
 
 * {
@@ -85,6 +103,7 @@ main {
 
 .btn {
     width: 200px;
+    height: 65px;
     border: solid 3px;
     border-radius: 5px;
     background-color: var(--light);
@@ -176,18 +195,56 @@ nav .navbar {
     text-decoration: underline;
 }
 
+
 .lower-container {
     position: relative;
     display: flex;
     flex-direction: row-reverse;
     flex: 1;
     width: 100%;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    padding-top: 20px;
+    margin: 8px auto;
     overflow-x: hidden;
     background-color: var(--primary);
+    justify-content: flex-end;
 }
+
+#edit-area {
+    background-color: var(--tertiary);
+    border-radius: 20px;
+    width: 320px;
+    margin: 32px;
+    padding: 8px;
+    float: left;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content-area {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    height: auto;
+    margin: 8px auto;
+    margin-right: 15px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+#entries {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+
 
 #selected-option {
     text-transform: uppercase;
@@ -200,47 +257,20 @@ nav .navbar {
     color: #444fca;
 }
 
-#edit-area {
-    background-color: var(--tertiary);
-    border-radius: 20px;
-}
-
-#edit-area {
-    width: 26.5%;
-    margin-right: 56px;
-    float: left;
-    margin-left: 15px;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
-}
-
-#content-area {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    width: 65.5%;
-    float: right;
-    height: auto;
-    margin: 0;
-    margin-right: 15px;
-    overflow-y: hidden;
-    overflow-x: hidden;
+#calendar {
+    height: 100%;
+    width: 100%;
 }
 
 #calendar-container {
   margin: 30px 5%;
   text-align-last: justify;
   width: 90%;
+  height: 90%;
   padding: 20px;
   background-color: var(--secondary);
   border-radius: 10px;
   font-family: 'handlee';
-  aspect-ratio: 560 / 478.95;
-  min-width: 600px;
 }
 
 div#event-form-container {
@@ -255,22 +285,18 @@ div#event-form-container {
     visibility: hidden;
 }
 
-#entries {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+
 
 .entry {
-    margin: 10px 0;
+    margin: 10px;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--quatrinary);
     width: 90%;
     font-family: 'handlee';
     font-size: 20px;
-    max-width: 512px;
+    max-width: 270px;
+    min-width: 220px;
 }
 
 .edit-button > img {
@@ -528,4 +554,66 @@ dialog {
     overflow: hidden;
     text-align: left;
     text-indent: 15px;
+}
+
+
+/* mediaqueries */
+
+/* Login/Signup Page */
+@media (max-width: 600px) {
+    #btn-container {
+        flex-direction: column;
+    }
+    #landing-wrapper {
+        width: 100%;
+        border-radius: 0px;
+        margin-top: 0px;
+        padding: 0px;
+    }
+
+    .form-card {
+        width: 100%;
+        border-radius: 0px;
+        margin: 0px;
+        max-width: 100%;
+    }
+
+    .form-input {
+        width: 95%;
+        max-width: 350px;
+    }
+}
+
+/* Dashboard */
+@media (max-width: 1024px) {
+    .lower-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 0px auto;
+    }
+
+    #content-area {
+        width: 100%;
+        margin: 0;
+        min-height: 500px;
+    }
+
+    #edit-area {
+        width: 100%;
+        margin: 0;
+        flex-grow: 1;
+        border-radius: 0px;
+    }
+
+    #entries {
+        width: 100%;
+        margin: 0;
+        flex-grow: 1;
+        border-radius: 0px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        overflow: hidden;
+        height: 100%;
+    }
 }
