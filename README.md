@@ -3,9 +3,9 @@
 
 Scribble Space is a user-friendly task management and planning application designed to help you stay organized and productive. Whether you're managing your daily to-do list or planning long-term projects, SimplePlanner has you covered.
 
-//add screen-shot
+![Preview image](preview.png)
 
-//add heroku link
+[Link to live deployment](https://scribble-space-ffea9e871ebd.herokuapp.com/)
 
 
 ## Features
