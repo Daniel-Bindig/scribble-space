@@ -81,7 +81,10 @@ async function renderEntry(entry){
     title.textContent = fullEntry.title;
     content.textContent = fullEntry.content;
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if(reminderButton.dataset.reminderid !== '0'){
+            await deleteReminder(reminderButton.dataset.reminderid);
+        }
         clone.remove();
         deleteEntry(entry.id).then(response => {
             refreshCalendar();
@@ -95,9 +98,9 @@ async function renderEntry(entry){
     // Toggle reminder state
     reminderButton.addEventListener('click', () => {
         if(reminderButton.dataset.reminderid !== '0'){
-            reminderButton.dataset.reminderid = '0';
+            deleteReminder(reminderButton.dataset.reminderid);
             reminderButton.querySelector('img').src = '/img/bell.svg';
-            deleteReminder(entry.id);
+            reminderButton.dataset.reminderid = "0";
         } else {
             const reminderId = createReminder(entry.id, entry.start);
             console.log(reminderId);
@@ -203,6 +206,8 @@ function createReminder(entryId, reminderTime){
 async function getReminderByEntryId(id){
     const response = await fetch(`/reminder/entry/${id}`);
     const data = await response.json();
+    console.log("Reminder data:");
+    console.log(data);
     return data;
 }
 
