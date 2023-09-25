@@ -62,6 +62,7 @@ async function renderEntry(entry){
     const editButton = clone.querySelector('.edit-button');
     const deleteButton = clone.querySelector('.delete-button');
     const reminderButton = clone.querySelector('.reminder-button');
+    const shareButton = clone.querySelector('.share-button');
 
     // Fetch notification status
     getReminderByEntryId(entry.id).then(reminder => {
@@ -90,6 +91,14 @@ async function renderEntry(entry){
     editButton.addEventListener('click', () => {
         showEditModal(fullEntry);
     });
+
+    shareButton.addEventListener('click', async () => {
+        // Generate share link and copy to clipboard
+        console.log("SHaring " + entry.id)
+        const shareLink = await shareEntry(entry.id);
+        navigator.clipboard.writeText(shareLink);
+    });
+
 
     // Toggle reminder state
     reminderButton.addEventListener('click', async () => {
@@ -136,6 +145,22 @@ async function deleteEntry(id){
     });
     return response;
 }
+
+async function shareEntry(entryId){
+    const response = await fetch('/share', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            entryId,
+            shareToUserId: 0
+        })
+    });
+    const data = await response.json();
+    return `${window.location.origin}/share/${data.accessKey}`;
+}
+
 
 async function updateEntry(id, title, content, tags){
     fetch(`/entry/${id}`, {

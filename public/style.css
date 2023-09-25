@@ -281,6 +281,14 @@ div#event-form-container {
     rotate: 135deg;
 }
 
+.share-button > img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 10px;
+    scale: 0.65;
+}
+
 .delete-button > img {
     width: 48px;
     height: 48px;
