@@ -30,9 +30,15 @@ router.post('/signup', async (req, res) => {
     failmessage = "Username must be between 4 and 32 characters.";
   }
 
-  //check if user already exists return error if they do
-  const user = await User.findOne({ where: { email: email } });
-  if (user) {    failmessage = "User already exists";
+  //check if email already exists return error if they do
+  const emailCheck = await User.findOne({ where: { email: email } });
+  if (emailCheck) {    failmessage = "User already exists";
+  }
+
+  // Check if username already exists
+  const usernameCheck = await User.findOne({ where: { username: username } });
+  if (usernameCheck) {
+    failmessage = "Username already exists";
   }
   
   // Add Password Length Check here
@@ -113,8 +119,9 @@ router.get('/user/details', (req, res) => {
 
 // Logout Route
 router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.logout(() => {
+    res.redirect('/');
+  });
 });
 
 router.get('/status', (req, res) => {
