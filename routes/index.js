@@ -17,7 +17,7 @@ const isAuthenticated = (req, res, next) => {
 const share = require('./share');
 const auth = require('./auth');
 const user = require('./user');
-//unauthenticatedRouter.use('/share', share);
+unauthenticatedRouter.use('/share', share);
 unauthenticatedRouter.use('/auth', auth);
 unauthenticatedRouter.use('/user', user);
 

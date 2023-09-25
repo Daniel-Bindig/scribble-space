@@ -19,14 +19,6 @@ Share.init({
     },
     allowNull: false
   },
-  sharedUserId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: User,
-      key: 'id'
-    },
-    allowNull: true
-  },
   accessKey: {
     type: DataTypes.STRING(255),
     allowNull: true
@@ -48,6 +40,5 @@ Share.init({
 });
 
 Share.belongsTo(Entry, { foreignKey: 'entryId' });
-Share.belongsTo(User, { foreignKey: 'sharedUserId' });
 
 module.exports = Share;
