@@ -6,8 +6,6 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     dateClick: function(info) {
         // Select current date
         calendar.select(info.date);
-        //console.log(info);
-        //showCreateModal(info.date);
     },
     // date selected
     select: function(info) {
@@ -67,7 +65,6 @@ async function renderEntry(entry){
 
     // Fetch notification status
     getReminderByEntryId(entry.id).then(reminder => {
-        console.log(reminder);
         if(reminder.length > 0){
             clone.querySelector('.reminder-button > img').src = '/img/bell-on.svg';
             reminderButton.dataset.reminderid = reminder[0].id;
@@ -76,7 +73,6 @@ async function renderEntry(entry){
 
     // Fetch event data
     const fullEntry = await getEntryById(entry.id);
-    console.log(fullEntry);
 
     title.textContent = fullEntry.title;
     content.textContent = fullEntry.content;
@@ -96,15 +92,14 @@ async function renderEntry(entry){
     });
 
     // Toggle reminder state
-    reminderButton.addEventListener('click', () => {
+    reminderButton.addEventListener('click', async () => {
         if(reminderButton.dataset.reminderid !== '0'){
             deleteReminder(reminderButton.dataset.reminderid);
             reminderButton.querySelector('img').src = '/img/bell.svg';
             reminderButton.dataset.reminderid = "0";
         } else {
-            const reminderId = createReminder(entry.id, entry.start);
-            console.log(reminderId);
-            reminderButton.dataset.reminderid = toString(reminderId);
+            const reminderId = await createReminder(entry.id, entry.start);
+            reminderButton.dataset.reminderid = reminderId;
             reminderButton.querySelector('img').src = '/img/bell-on.svg';
             
         }
@@ -175,7 +170,6 @@ async function createEntry(title, content, tags, entryDate){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         calendar.addEvent({
             title: data.title,
             start: data.entryDate,
@@ -186,8 +180,8 @@ async function createEntry(title, content, tags, entryDate){
     });
 }
 
-function createReminder(entryId, reminderTime){
-    fetch('/reminder', {
+async function createReminder(entryId, reminderTime){
+    const response = await fetch('/reminder', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -196,18 +190,14 @@ function createReminder(entryId, reminderTime){
             entryId,
             reminderTime
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        return data;
     });
+    const data = await response.json();
+    return data.id;
 }
 
 async function getReminderByEntryId(id){
     const response = await fetch(`/reminder/entry/${id}`);
     const data = await response.json();
-    console.log("Reminder data:");
-    console.log(data);
     return data;
 }
 
@@ -265,7 +255,6 @@ function showEditModal(entry){
         handleClose();
     });
 
-    console.log(entry);
   
     const readableDate = new Date(entry.entryDate).toLocaleDateString('en-US', {
       year: 'numeric',
