@@ -1,8 +1,8 @@
 :root {
-    --primary: #4d433c;
+    --primary: #634b3d;
     --secondary: #f3e5b8;
-    --tertiary: #634b3d;
-    --quatrinary: #f8f5e9;
+    --tertiary: hsl(22 20% 40% / 1);
+    --quatrinary: #f3e5b8;
     --light: #e3e4e3;
     --dark: #182c23;
     --error: rgb(228, 46, 1);
@@ -182,7 +182,7 @@ nav .navbar {
     padding-bottom: 20px;
     padding-top: 20px;
     overflow-x: hidden;
-    background-color: #e8efef;
+    background-color: var(--primary);
 }
 
 #selected-option {
@@ -196,9 +196,9 @@ nav .navbar {
     color: #444fca;
 }
 
-#edit-area,
-#content-area {
-    background-color: #EAEBEC;
+#edit-area {
+    background-color: var(--tertiary);
+    border-radius: 20px;
 }
 
 #edit-area {
@@ -206,7 +206,6 @@ nav .navbar {
     margin-right: 56px;
     float: left;
     margin-left: 15px;
-    border: 1px solid green;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -222,7 +221,6 @@ nav .navbar {
     width: 65.5%;
     float: right;
     height: auto;
-    border: 1px solid blue;
     margin: 0;
     margin-right: 15px;
     overflow-y: hidden;
@@ -232,13 +230,13 @@ nav .navbar {
 #calendar-container {
   margin: 30px 5%;
   text-align-last: justify;
-  height: 70vh;
   width: 90%;
   padding: 20px;
   background-color: var(--secondary);
   border-radius: 10px;
   font-family: 'handlee';
-  overflow: hidden;
+  aspect-ratio: 560 / 478.95;
+  min-width: 600px;
 }
 
 div#event-form-container {
@@ -268,6 +266,7 @@ div#event-form-container {
     width: 90%;
     font-family: 'handlee';
     font-size: 20px;
+    max-width: 512px;
 }
 
 .edit-button > img {
@@ -338,6 +337,7 @@ div#event-form-container {
     background-color: var(--quatrinary);
     font-family: 'handlee';
     font-size: 20px;
+    border: none;
 }
 
 #edit-form {
@@ -345,7 +345,86 @@ div#event-form-container {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: var(--quatrinary);
+    font-family: 'handlee';
+    font-size: 20px;
+}
+
+/* fully transparrent text input boxes */
+
+#edit-form > input, #edit-form > div > input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    margin-bottom: 10px;
+}
+
+#edit-form > div > input:hover {
+    transform: scale(1.35);
+}
+
+#edit-form > textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    font-size: 20px;
+    flex-grow: 1;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+#edit-form > div {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+}
+
+#edit-form > *, #edit-form > div > * {
+    font-family: 'handlee';
+}
+
+/* Match same look as entry styles */
+#edit-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#edit-content{
+    overflow: hidden;
+    text-align: left;
+    text-indent: 15px;
+}
+
+dialog {
+    width: 600px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-style: none;
+    overflow: hidden;
+}
+
+/* Visually similar to entry styles */
+#modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     margin: 0 auto;
     margin-top: 20px;
     padding: 20px;
@@ -353,4 +432,11 @@ div#event-form-container {
     background-color: var(--quatrinary);
     font-family: 'handlee';
     font-size: 20px;
+}
+
+#edit-modal-title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
 }

@@ -223,7 +223,7 @@ function showEditModal(entry){
     // Populate form data
     form.querySelector('#edit-title').value = entry.title;
     form.querySelector('#edit-content').value = entry.content;
-    form.querySelector('#edit-tags').value = entry.tags;
+    //form.querySelector('#edit-tags').value = entry.tags;
   
     function handleSubmit(event) {
       event.preventDefault();
@@ -231,9 +231,9 @@ function showEditModal(entry){
       const formData = new FormData(form);
       const title = formData.get('title');
       const content = formData.get('content');
-      const tags = formData.get('tags');
+      //const tags = formData.get('tags');
 
-      updateEntry(entry.id, title, content, tags);
+      updateEntry(entry.id, title, content, '');
       populateEntriesPanel();
   
       modal.close();
