@@ -31,10 +31,8 @@ app.use(express.static('public'));
 // Whitelist remote scripts
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["*"],
-    // https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js
-    //scriptSrc: ["self", "'sha256-ZjA0NzFmMjA5NDU2Y2FmOWVlZmQ0ZDBlYjFmMGE0ZDM5Yzc1MjQ2NTY2NzgyZDlhZWVjMjUwMWViNmQ2NjEyMA=='"]
-    scriptSrc: ["*"],
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
   }
 }));
 app.use(cors());
