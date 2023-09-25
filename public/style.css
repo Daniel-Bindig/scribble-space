@@ -235,7 +235,8 @@ nav .navbar {
   background-color: var(--secondary);
   border-radius: 10px;
   font-family: 'handlee';
-  overflow: hidden;
+  aspect-ratio: 560 / 478.95;
+  min-width: 600px;
 }
 
 div#event-form-container {
@@ -265,6 +266,7 @@ div#event-form-container {
     width: 90%;
     font-family: 'handlee';
     font-size: 20px;
+    max-width: 512px;
 }
 
 .edit-button > img {
